@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Kover</string>
+
+    <!-- Common -->
+    <string name="common_back">Back</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_save">Save</string>
+    <string name="common_apply">Apply</string>
+    <string name="common_retry">Try again</string>
+    <string name="common_close">Close</string>
+    <string name="common_refresh">Refresh</string>
+    <string name="common_scan">Scan</string>
+    <string name="common_scanning">Scanning…</string>
+    <string name="common_loading">Loading…</string>
+    <string name="common_none">None</string>
+    <string name="common_translate">Translate to %1$s</string>
+    <string name="common_translating">Translating…</string>
+    <string name="common_of">%1$d / %2$d</string>
+    <string name="nav_collapse">Collapse</string>
+    <string name="nav_expand">Expand</string>
+
+    <!-- Navigation -->
+    <string name="nav_library">Library</string>
+    <string name="nav_scrapers">Scrapers</string>
+    <string name="nav_launcher">Launchers</string>
+    <string name="nav_backups">Backups</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Library -->
+    <string name="library_systems">Platforms</string>
+    <string name="library_roms_total">%1$d ROMs</string>
+    <string name="library_scan_failed">Could not read the ROM folder.</string>
+    <string name="library_empty_title">No platforms yet</string>
+    <string name="library_empty_body">Pick the folder that holds your ROMs (one sub-folder per platform), then scan it.</string>
+    <string name="library_no_folder_title">ROM folder is not set</string>
+    <string name="library_scanning">Scanning…</string>
+    <string name="library_no_folder_body">Open Settings → ROM folder and choose your library folder.</string>
+    <string name="library_open_settings">Open settings</string>
+    <string name="library_rescan">Rescan library</string>
+
+    <!-- ROM list -->
+    <string name="roms_empty">No ROMs found for this platform.</string>
+
+    <!-- ROM card -->
+    <string name="rom_metadata">Metadata</string>
+    <string name="rom_images">Images</string>
+    <string name="rom_edit_metadata">Edit metadata</string>
+    <string name="rom_edit_images">Edit artwork</string>
+    <string name="rom_edit_metadata_hint">Name, description, genre, translate</string>
+    <string name="rom_edit_images_hint">%1$d of %2$d slots filled</string>
+    <string name="rom_no_metadata">No metadata yet</string>
+    <string name="rom_file">File</string>
+    <string name="rom_system">Platform</string>
+    <string name="rom_path">Path</string>
+    <string name="rom_no_cover">No cover</string>
+    <string name="preview_more">Show full text</string>
+    <string name="preview_edit">Change</string>
+    <string name="preview_open">Open</string>
+
+    <!-- Metadata fields -->
+    <string name="field_name">Name</string>
+    <string name="field_desc">Description</string>
+    <string name="field_rating">Rating</string>
+    <string name="field_release">Release date</string>
+    <string name="field_developer">Developer</string>
+    <string name="field_publisher">Publisher</string>
+    <string name="field_genre">Genre</string>
+    <string name="field_players">Players</string>
+
+    <!-- Artwork slots (ES-DE folders) -->
+    <string name="slot_covers">Covers</string>
+    <string name="slot_backcovers">Back covers</string>
+    <string name="slot_fanart">Fan art</string>
+    <string name="slot_screenshots">Screenshots</string>
+    <string name="slot_videos">Videos</string>
+    <string name="slot_marquees">Logos</string>
+    <string name="slot_titlescreens">Title screens</string>
+    <string name="slot_manuals">Manuals</string>
+    <string name="slot_3dboxes">3D boxes</string>
+    <string name="slot_physicalmedia">Physical media</string>
+    <string name="slot_miximages">Mix images</string>
+    <string name="slot_icons">Icons</string>
+
+    <!-- Artwork editor -->
+    <string name="assets_title">Artwork</string>
+    <string name="assets_slots">Slots</string>
+    <string name="assets_results">Found artwork</string>
+    <string name="assets_query">Search name</string>
+    <string name="assets_search">Search</string>
+    <string name="assets_searching">Searching…</string>
+    <string name="assets_not_found">Nothing found</string>
+    <string name="assets_not_found_hint">Fix the name above and search again — for example “Sonic” instead of “S0nic”.</string>
+    <string name="assets_found_count">%1$d found</string>
+    <string name="assets_pick_candidate">Pick the matching game</string>
+    <string name="assets_pick_game">Choose game (%1$d)</string>
+    <string name="assets_target">Apply to slot</string>
+    <string name="assets_empty_slot">No artwork for this slot from this source.</string>
+    <string name="assets_apply_to">Apply to %1$s</string>
+    <string name="assets_applied">Saved to %1$s</string>
+    <string name="assets_applying">Downloading…</string>
+    <string name="assets_failed">Could not save the file</string>
+    <string name="assets_source_unsupported">%1$s is not supported by this source — try SteamGridDB.</string>
+    <string name="assets_no_settings">Set the ES-DE folder in Launcher settings first.</string>
+
+    <!-- Metadata editor -->
+    <string name="meta_title">Metadata</string>
+    <string name="meta_current">Current values</string>
+    <string name="meta_from_source">From %1$s</string>
+    <string name="meta_apply_all">Use these values</string>
+    <string name="meta_saved">Metadata saved</string>
+    <string name="meta_no_source_data">This source returned no text metadata.</string>
+    <string name="meta_ru_available">Localized description available from the source</string>
+    <string name="meta_use_ru">Use localized description</string>
+    <string name="meta_use_localized">Use description (%1$s)</string>
+    <string name="meta_saving">Saving…</string>
+    <string name="meta_failed">Could not write gamelist.xml</string>
+
+    <!-- Scrapers -->
+    <string name="scrapers_title">Scrapers</string>
+    <string name="scrapers_hint">Credentials are stored on this device only.</string>
+    <string name="scrapers_configured">Configured</string>
+    <string name="scrapers_not_configured">Not configured</string>
+    <string name="scrapers_client_id">Client ID</string>
+    <string name="scrapers_client_secret">Client secret</string>
+    <string name="scrapers_bearer">Personal API key (optional, ns_live_…)</string>
+    <string name="scrapers_token">API token</string>
+    <string name="scrapers_dev_id">Developer ID</string>
+    <string name="scrapers_dev_password">Developer password</string>
+    <string name="scrapers_ss_user">User name (optional)</string>
+    <string name="scrapers_ss_password">User password (optional)</string>
+    <string name="scrapers_ss_hint">Credentials are issued on screenscraper.fr (developer account).</string>
+    <string name="scrapers_saved">Saved</string>
+    <string name="scrapers_configure">Configure</string>
+    <string name="scraper_howto">How to set up</string>
+    <string name="neo_howto">1. Sign in at neoassets.dev.\n2. Open Dashboard → Applications → your API keys.\n3. Create a personal key starting with ns_live_ and paste it below.\nWithout a personal key requests run in guest mode (1 shared thread).</string>
+    <string name="neo_open_site">Open the dashboard and create a personal key</string>
+    <string name="neo_key_label">Personal API key (ns_live_…)</string>
+    <string name="neo_guest_hint">Guest mode is limited to one thread shared by all apps — a personal key is strongly recommended.</string>
+    <string name="sgdb_howto">1. Sign in at steamgriddb.com.\n2. Open Preferences → API.\n3. Copy the API key and paste it below.</string>
+    <string name="sgdb_open_site">Open the API key page</string>
+    <string name="scraper_connection">Connection</string>
+    <string name="scraper_test">Check connection</string>
+    <string name="scraper_testing">Checking…</string>
+    <string name="scraper_test_ok">Connected</string>
+    <string name="scraper_test_error">Failed: %1$s</string>
+    <string name="scraper_quota">quota %1$d / %2$d</string>
+    <string name="scrapers_soon">Soon</string>
+    <string name="scrapers_soon_section">Coming soon</string>
+    <string name="libretro_desc">Retro box art, screenshots and title screens (no key)</string>
+    <string name="rawg_desc">Modern games: descriptions, background, screenshots</string>
+    <string name="libretro_howto">No keys required. Images come from the open libretro-thumbnails repositories on GitHub.</string>
+    <string name="libretro_open_site">Open the thumbnail repositories</string>
+    <string name="rawg_howto">1. Sign in at rawg.io.\n2. Open the API docs page and copy your API key.\n3. Paste it below.</string>
+    <string name="rawg_open_site">Open the API key page</string>
+    <string name="rawg_key_label">RAWG API key</string>
+    <string name="steam_desc">Steam games: descriptions, header art, screenshots (no key)</string>
+    <string name="steam_howto">No key required. Data comes from the public Steam Store API.</string>
+    <string name="steam_open_site">Open the Steam Store</string>
+    <string name="scrapers_toggle_hint">Tap a row to turn the scraper on or off; it is hidden in the editors when off.</string>
+    <string name="scrapers_none_enabled">No scrapers enabled — turn them on in the Scrapers section.</string>
+
+    <!-- Launcher -->
+    <string name="launcher_title">Launcher</string>
+    <string name="launcher_hint">Kover writes metadata and artwork directly into the launcher folder.</string>
+    <string name="launcher_dir">ES-DE folder</string>
+    <string name="launcher_data_dir">Data folder</string>
+    <string name="launcher_pick_data_dir">Choose data folder</string>
+    <string name="launcher_pick_dir">Choose ES-DE folder</string>
+    <string name="launcher_not_set">not set</string>
+    <string name="launcher_other">Other</string>
+    <string name="launcher_other_hint">For other launchers later</string>
+    <string name="neostation_subtitle">SQLite library: metadata and artwork</string>
+    <string name="neostation_hint">NeoStation keeps data.sqlite and media in the NeoStation folder. Close NeoStation before saving so it reloads the database.</string>
+    <string name="neostation_autodetect">Find the folder automatically</string>
+    <string name="neostation_no_folder">NeoStation folder is not set. Open Launchers - NeoStation and pick the NeoStation folder.</string>
+    <string name="custom_subtitle">Your own folder: gamelists + media, all 11 slots</string>
+    <string name="custom_hint">Kover creates gamelists/{system}/gamelist.xml and media/{system}/{slot}/ inside the folder you choose.</string>
+    <string name="custom_no_folder">Custom folder is not set. Open Launchers - Custom and pick an empty folder.</string>
+    <string name="cocoon_info_title">Cocoon</string>
+    <string name="cocoon_info_body">Cocoon keeps its database in private app storage, so Kover cannot edit it directly. Turn on ES-DE integration inside Cocoon: it imports gamelists and artwork from the ES-DE folder, so changes made here show up after Cocoon syncs.</string>
+    <string name="cocoon_via_esde">via ES-DE</string>
+    <string name="cocoon_subtitle">Imported through Cocoon’s own ES-DE integration</string>
+    <string name="launcher_unsupported">This launcher is not supported yet.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme_system">Follows the system theme and accent color</string>
+    <string name="settings_language_system">Follows the system language</string>
+    <string name="settings_storage">File access</string>
+    <string name="settings_storage_body">All-files access is needed to scan ROMs and write artwork into the launcher folder.</string>
+    <string name="settings_storage_allow">Allow file access</string>
+    <string name="settings_rom_dir">ROM folder</string>
+    <string name="settings_backups">Backups</string>
+    <string name="settings_backups_space_hint">Keep original artwork and metadata before changes. Uses disk space.</string>
+    <string name="settings_pick_rom_dir">Choose ROM folder</string>
+    <string name="settings_section_data">Sources</string>
+    <string name="settings_translation">Translation</string>
+    <string name="settings_translation_hint">Target language for the translate button in the metadata editor.</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_accent">Accent color</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system">System</string>
+    <string name="settings_theme_preset">App theme</string>
+    <string name="theme_system_accent">System accent</string>
+    <string name="theme_forest">Forest</string>
+    <string name="theme_retro">Retro 16-bit</string>
+    <string name="theme_arcade">Arcade</string>
+    <string name="theme_ocean">Ocean</string>
+    <string name="theme_ruby">Ruby</string>
+    <string name="theme_nord">Nord</string>
+    <string name="theme_mono">Monochrome</string>
+    <string name="updates_current_only">Installed %1$s · up to date</string>
+    <string name="updates_current_and_new">Installed %1$s · available %2$s</string>
+    <string name="scrape_not_for_apps">Apps and emulators have no game metadata to scrape.</string>
+    <string name="settings_backups_hint">Restore individual fields or artwork</string>
+    <string name="settings_updates">Updates</string>
+    <string name="updates_auto">Check for updates automatically</string>
+    <string name="updates_check">Check now</string>
+    <string name="updates_checking">Checking…</string>
+    <string name="updates_current">Installed: %1$s</string>
+    <string name="updates_available">Available: %1$s</string>
+    <string name="updates_none">You have the latest version</string>
+    <string name="updates_open">Open on GitHub</string>
+    <string name="updates_dialog_title">Update %1$s is available</string>
+    <string name="updates_download">Download</string>
+    <string name="updates_downloading">Downloading… %1$d%%</string>
+    <string name="updates_install">Install</string>
+    <string name="updates_later">Later</string>
+    <string name="updates_download_error">Download failed</string>
+    <string name="updates_no_apk">This release has no APK attached</string>
+    <string name="backups_title">Backups</string>
+    <string name="backups_empty">No backups yet</string>
+    <string name="backups_empty_hint">Backups appear here after you change metadata or artwork.</string>
+    <string name="backups_field_title">Previous values</string>
+    <string name="backups_restore">Restore</string>
+    <string name="backups_restored">Restored</string>
+    <string name="backups_restore_hint">Only what you select is restored.</string>
+    <string name="backups_none_selected">Nothing selected</string>
+    <string name="backups_art">Artwork</string>
+    <string name="backups_meta">Metadata</string>
+    <string name="backups_previous">Previous</string>
+    <string name="backups_no_diff">There are no differences from the current values.</string>
+    <string name="backups_prev">‹ Prev</string>
+    <string name="backups_next">Next ›</string>
+    <string name="backups_page">%1$d / %2$d</string>
+    <string name="backups_no_launcher">Set the ES-DE folder first.</string>
+    <string name="library_section_apps">Apps &amp; emulators</string>
+    <string name="library_section_android_games">Android Games</string>
+    <string name="rom_view_grid">Grid</string>
+    <string name="rom_view_list">List</string>
+    <string name="slot_video_hint">Video</string>
+    <string name="slot_manual_hint">PDF</string>
+    <string name="about_title">About</string>
+    <string name="about_tagline">Artwork and metadata editor for your game library.</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_services">Services</string>
+    <string name="about_esde_desc">Android launcher Kover writes gamelists and artwork into.</string>
+    <string name="about_neoassets_desc">Retro and modern console metadata, localized descriptions and system art packs.</string>
+    <string name="about_sgdb_desc">Covers, fan art, logos and icons for modern platforms.</string>
+    <string name="about_screenscraper_desc">Metadata and media for retro systems (account required).</string>
+    <string name="about_mymemory_desc">Free machine translation for descriptions.</string>
+    <string name="about_github_desc">Update checks and source code.</string>
+    <string name="about_launchers">Supported launchers</string>
+    <string name="about_launcher_esde">gamelist.xml + downloaded_media</string>
+    <string name="about_launcher_neostation">data.sqlite + media folders</string>
+    <string name="about_launcher_cocoon">Through Cocoon’s own ES-DE import</string>
+    <string name="about_build">Version %1$s (%2$d)</string>
+    <string name="about_libretro_desc">Box art, screenshots and title screens, no key required.</string>
+    <string name="about_steam_desc">Descriptions and artwork from the Steam Store, no key required.</string>
+    <string name="about_neostation_desc">Library database used by the NeoStation launcher.</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_icons">Icons: Material Icons (Apache 2.0 license).</string>
+    <string name="about_system_art">Platform artwork: NeoStation art pack via NeoAssets.</string>
+    <string name="about_license">Licensed under the GNU General Public License v3.0 (GPL-3.0-only).</string>
+    <string name="about_third_party">Third-party licenses</string>
+    <string name="about_support">Support the project</string>
+    <string name="about_boosty_desc">Support development</string>
+    <string name="about_source">Source code</string>
+    <string name="mix_create">Create</string>
+    <string name="mix_creating">Creating…</string>
+    <string name="mix_created">Miximage created</string>
+    <string name="mix_need_sources">A screenshot is required to build a miximage</string>
+    <string name="mix_failed">Could not create the miximage</string>
+    <string name="mix_hint">Combines the screenshot, logo, 3D box and physical media into one image.</string>
+    <string name="assets_hint_search">Press “Search” to load data from this source.</string>
+</resources>

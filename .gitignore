@@ -1,0 +1,45 @@
+# Build output
+/build
+/app/build/
+.gradle/
+.kotlin/
+/captures
+.externalNativeBuild
+.cxx/
+
+# Local SDK / signing / secrets — never publish
+local.properties
+/local.properties
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+.env
+*.p12
+*.pem
+
+# Internal notes and downloaded docs (contain credentials / are not ours)
+AGENTS.md
+4pda.md
+tools/
+*.mhtml
+sgrd_spec.yml
+
+# IDE and OS files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artifacts and logs
+*.apk
+*.aab
+*.ap_
+*.hprof
+*.log
+.tmp*
+
+# External launcher data
+ES-DE/

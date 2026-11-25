@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- carpet badge -->
+    <path
+        android:fillColor="#8E1B22"
+        android:pathData="M10,0 L38,0 A10,10 0 0 1 48,10 L48,38 A10,10 0 0 1 38,48 L10,48 A10,10 0 0 1 0,38 L0,10 A10,10 0 0 1 10,0 Z" />
+    <path
+        android:strokeColor="#E9DCC3"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:pathData="M4,4 L44,4 L44,44 L4,44 Z" />
+    <!-- medallion -->
+    <path android:fillColor="#D9A441" android:pathData="M24,10 L38,24 L24,38 L10,24 Z" />
+    <path android:fillColor="#E9DCC3" android:pathData="M24,15 L33,24 L24,33 L15,24 Z" />
+    <path android:fillColor="#1F4E5A" android:pathData="M24,19 L29,24 L24,29 L19,24 Z" />
+    <path android:fillColor="#8E1B22" android:pathData="M24,22 L26,24 L24,26 L22,24 Z" />
+</vector>
