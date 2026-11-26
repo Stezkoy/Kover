@@ -161,7 +161,7 @@
     <string name="launcher_title">Лаунчер</string>
     <string name="launcher_hint">Kover пишет метаданные и арт прямо в папку лаунчера.</string>
     <string name="launcher_howto">Как настроить</string>
-    <string name="launcher_import_hint">ES-DE, NeoStation и Custom пишутся напрямую. Cocoon и Daijisho — только через импорт; откройте их карточки для подробной инструкции.</string>
+    <string name="launcher_import_hint">ES-DE, NeoStation и Custom пишутся напрямую. Cocoon, Daijisho и iiSU — только через импорт; откройте их карточки для подробной инструкции.</string>
     <string name="launcher_import_subtitle">Импорт из ES-DE (без прямой синхронизации)</string>
     <string name="launcher_dir">Папка ES-DE</string>
     <string name="launcher_data_dir">Папка данных</string>
@@ -182,6 +182,8 @@
     <string name="daijisho_title">Daijisho</string>
     <string name="daijisho_info_body">Daijisho хранит библиотеку в приватной Room-базе и не даёт API или content provider для записи. Поэтому данные переносятся импортом из ES-DE.</string>
     <string name="daijisho_howto">1. Ведите библиотеку в Kover в режиме ES-DE: метаданные и арт попадут в его папку.\n2. В Daijisho добавьте платформу и синхронизируйте папку с ROM.\n3. Откройте платформу → Edit → Import Metadata и выберите ES-DE/gamelists/{system}/gamelist.xml.\n4. Затем Import Preview Media: обложки — downloaded_media/{system}/covers, скриншоты — screenshots, титульники — titlescreens.\n5. После изменений в Kover импорт нужно повторить.</string>
+    <string name="iisu_howto">1. Переключите Kover на лаунчер ES-DE и отредактируйте метаданные или арт.\n2. В iiSU откройте Settings → Library → Sources → ES-DE Metadata.\n3. Нажмите Link ES-DE folder и выберите ту же папку ES-DE.\n4. После изменений в Kover нажмите Reload ES-DE folder; медиа остаётся в ES-DE и не копируется.</string>
+    <string name="iisu_info_body">iiSU хранит библиотеку в приватных Room-базах, но умеет подключать папку ES-DE: метаданные импортируются, а арт подключается по ссылке, без копирования. Поэтому Kover передаёт данные в iiSU через режим ES-DE.</string>
     <string name="launcher_unsupported">Этот лаунчер пока не поддерживается.</string>
 
     <!-- Settings -->

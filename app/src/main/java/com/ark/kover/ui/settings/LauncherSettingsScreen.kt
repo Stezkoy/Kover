@@ -91,5 +91,10 @@ fun LauncherListScreen(
             subtitle = stringResource(R.string.launcher_import_subtitle),
             onClick = { onLauncherClick("daijisho") },
         )
+        ActionRow(
+            title = "iiSU",
+            subtitle = stringResource(R.string.launcher_import_subtitle),
+            onClick = { onLauncherClick("iisu") },
+        )
     }
 }

@@ -162,7 +162,7 @@
     <string name="launcher_title">启动器</string>
     <string name="launcher_hint">Kover 会直接把元数据和图片写入启动器文件夹。</string>
     <string name="launcher_howto">如何设置</string>
-    <string name="launcher_import_hint">ES-DE、NeoStation 和 Custom 会直接写入。Cocoon 和 Daijisho 只能通过导入更新；请打开它们的卡片查看详细步骤。</string>
+    <string name="launcher_import_hint">ES-DE、NeoStation 和 Custom 会直接写入。Cocoon、Daijisho 和 iiSU 只能通过导入更新；请打开它们的卡片查看详细步骤。</string>
     <string name="launcher_import_subtitle">从 ES-DE 导入（无直接同步）</string>
     <string name="launcher_dir">ES-DE 文件夹</string>
     <string name="launcher_data_dir">数据文件夹</string>
@@ -183,6 +183,8 @@
     <string name="daijisho_title">Daijisho</string>
     <string name="daijisho_info_body">Daijisho 将游戏库保存在私有 Room 数据库中，且没有提供可写入的 API 或 ContentProvider。因此只能从 ES-DE 导入数据。</string>
     <string name="daijisho_howto">1. 在 Kover 的 ES-DE 模式下维护游戏库，元数据和图片会写入 ES-DE 文件夹。\n2. 在 Daijisho 中添加平台并同步 ROM 文件夹。\n3. 打开平台 → Edit → Import Metadata，选择 ES-DE/gamelists/{system}/gamelist.xml。\n4. 然后使用 Import Preview Media：封面来自 downloaded_media/{system}/covers，截图来自 screenshots，标题图来自 titlescreens。\n5. 在 Kover 中修改后需要重新导入。</string>
+    <string name="iisu_howto">1. 在 Kover 中切换到 ES-DE 启动器，编辑元数据或图片。\n2. 在 iiSU 中打开 Settings → Library → Sources → ES-DE Metadata。\n3. 点击 Link ES-DE folder，选择同一个 ES-DE 文件夹。\n4. 在 Kover 中修改后点击 Reload ES-DE folder；媒体保留在 ES-DE 中，不会被复制。</string>
+    <string name="iisu_info_body">iiSU 将游戏库保存在私有 Room 数据库中，但可以链接 ES-DE 文件夹：元数据会被导入，图片按路径引用而不复制。因此 Kover 可以通过 ES-DE 模式为 iiSU 提供数据。</string>
     <string name="launcher_unsupported">暂不支持该启动器。</string>
 
     <!-- Settings -->

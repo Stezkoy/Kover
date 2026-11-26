@@ -41,6 +41,7 @@ Kover не запускает игры и не собирает библиоте
 | **Custom** | своя аккуратная папка: `gamelists/{система}/gamelist.xml` + `media/{система}/{слот}` |
 | **Cocoon** | напрямую не пишет — изменения подхватывает импорт ES-DE самого Cocoon |
 | **Daijisho** | напрямую не пишет — импорт `gamelist.xml` и папок медиа через ES-DE/Skraper-импорт Daijisho |
+| **iiSU** | напрямую не пишет — подключите папку ES-DE; метаданные импортируются, арт используется по ссылке |
 
 Переключение между лаунчерами — одно нажатие; у каждого запоминается своя папка данных.
 
@@ -157,7 +158,7 @@ Kover — свободное ПО под **GNU General Public License v3.0 (GPL-
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 Названия игр, обложки и товарные знаки принадлежат их владельцам. Kover не связан с ES-DE,
-NeoStation, Cocoon, Daijisho, NeoAssets, SteamGridDB, Steam, RAWG и ScreenScraper.
+NeoStation, Cocoon, Daijisho, iiSU, NeoAssets, SteamGridDB, Steam, RAWG и ScreenScraper.
 
 ## Ссылки
 

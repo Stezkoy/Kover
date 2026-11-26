@@ -87,6 +87,7 @@ fun LauncherDetailScreen(
         "custom" -> "Custom"
         "cocoon" -> "Cocoon"
         "daijisho" -> "Daijisho"
+        "iisu" -> "iiSU"
         "emudeck" -> "EmuDeck"
         else -> stringResource(R.string.nav_launcher)
     }
@@ -98,19 +99,15 @@ fun LauncherDetailScreen(
         onBack = onBack,
     ) {
         Text(title, style = MaterialTheme.typography.titleMedium)
-        if (launcherId == "cocoon" || launcherId == "daijisho") {
-            val intro = if (launcherId == "cocoon") {
-                R.string.cocoon_info_body
-            } else {
-                R.string.daijisho_info_body
-            }
-            val howto = if (launcherId == "cocoon") {
-                R.string.cocoon_howto
-            } else {
-                R.string.daijisho_howto
-            }
+        val importGuide = when (launcherId) {
+            "cocoon" -> R.string.cocoon_info_body to R.string.cocoon_howto
+            "daijisho" -> R.string.daijisho_info_body to R.string.daijisho_howto
+            "iisu" -> R.string.iisu_info_body to R.string.iisu_howto
+            else -> null
+        }
+        if (importGuide != null) {
             Text(
-                text = stringResource(intro),
+                text = stringResource(importGuide.first),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -119,7 +116,7 @@ fun LauncherDetailScreen(
                 modifier = Modifier.padding(top = Dimens.Gap6),
             )
             Text(
-                text = stringResource(howto),
+                text = stringResource(importGuide.second),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

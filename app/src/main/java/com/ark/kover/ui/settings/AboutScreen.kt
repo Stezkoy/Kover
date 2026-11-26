@@ -72,6 +72,7 @@ fun AboutScreen(
         LauncherInfo("Custom", R.string.about_launcher_custom)
         LauncherInfo("Cocoon", R.string.about_launcher_via_esde_import)
         LauncherInfo("Daijisho", R.string.about_launcher_via_esde_import)
+        LauncherInfo("iiSU", R.string.about_launcher_via_esde_import)
 
         SectionTitle(text = stringResource(R.string.about_services))
         ServiceRow("ES-DE", R.string.about_esde_desc, "https://es-de.org", context)

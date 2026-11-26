@@ -163,7 +163,7 @@
     <string name="launcher_title">Launcher</string>
     <string name="launcher_hint">Kover writes metadata and artwork directly into the launcher folder.</string>
     <string name="launcher_howto">How to set up</string>
-    <string name="launcher_import_hint">ES-DE, NeoStation and Custom are written directly. Cocoon and Daijisho are import-only — open their cards for detailed steps.</string>
+    <string name="launcher_import_hint">ES-DE, NeoStation and Custom are written directly. Cocoon, Daijisho and iiSU are import-only — open their cards for detailed steps.</string>
     <string name="launcher_import_subtitle">Import from ES-DE (no direct sync)</string>
     <string name="launcher_dir">ES-DE folder</string>
     <string name="launcher_data_dir">Data folder</string>
@@ -184,6 +184,8 @@
     <string name="daijisho_title">Daijisho</string>
     <string name="daijisho_info_body">Daijisho keeps its library in a private Room database and offers no API or content provider, so Kover cannot write to it. Data is brought over by importing from ES-DE.</string>
     <string name="daijisho_howto">1. Keep your library in Kover’s ES-DE mode so metadata and artwork land in its folder.\n2. In Daijisho, add the platform and sync its ROM folder.\n3. Open the platform → Edit → Import Metadata and pick ES-DE/gamelists/{system}/gamelist.xml.\n4. Then use Import Preview Media: covers from downloaded_media/{system}/covers, screenshots from screenshots and titles from titlescreens.\n5. Repeat the import after Kover changes.</string>
+    <string name="iisu_howto">1. Switch Kover to the ES-DE launcher and edit metadata or artwork.\n2. In iiSU open Settings → Library → Sources → ES-DE Metadata.\n3. Tap Link ES-DE folder and select the same ES-DE folder.\n4. After changes in Kover, tap Reload ES-DE folder; media stays in ES-DE and is not copied.</string>
+    <string name="iisu_info_body">iiSU keeps its library in private Room databases, but can link an ES-DE folder: metadata is imported and artwork is referenced in place, without copying. Kover can therefore feed iiSU through its ES-DE mode.</string>
     <string name="launcher_unsupported">This launcher is not supported yet.</string>
 
     <!-- Settings -->
