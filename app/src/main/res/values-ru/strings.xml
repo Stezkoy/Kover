@@ -232,9 +232,17 @@
     <string name="updates_later">Позже</string>
     <string name="updates_download_error">Не удалось скачать обновление</string>
     <string name="updates_no_apk">В этом релизе нет APK</string>
+    <string name="updates_downloaded">Файл загружен. Готов к установке.</string>
+    <string name="updates_download_size">%1$s из %2$s МБ</string>
+    <string name="updates_downloading_size">Загрузка… %1$s МБ</string>
+    <string name="updates_connecting">Подключение…</string>
+    <string name="updates_changelog">Что нового</string>
     <string name="backups_title">Резервные копии</string>
     <string name="backups_empty">Копий пока нет</string>
     <string name="backups_empty_hint">Копии появляются здесь после изменения метаданных или картинок.</string>
+    <string name="backups_disabled_title">Резервные копии отключены</string>
+    <string name="backups_disabled_body">Kover не сохраняет оригиналы. Включите бэкапы в настройках, чтобы можно было восстановить арт или метаданные после изменений.</string>
+    <string name="backups_open_settings">Открыть настройки</string>
     <string name="backups_field_title">Прежние значения</string>
     <string name="backups_restore">Восстановить</string>
     <string name="backups_restored">Восстановлено</string>

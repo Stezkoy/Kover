@@ -154,6 +154,23 @@ fun BackupsScreen(
             return@AppScaffold
         }
 
+        if (!settings.backupOnChange) {
+            Text(
+                text = stringResource(R.string.backups_disabled_title),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+            Text(
+                text = stringResource(R.string.backups_disabled_body),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            ActionRow(
+                title = stringResource(R.string.backups_open_settings),
+                onClick = { onTabSelected(KoverTab.Settings) },
+            )
+        }
+
         if (viewModel.message.isNotBlank()) {
             Text(
                 text = viewModel.message,

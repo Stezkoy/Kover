@@ -234,9 +234,17 @@
     <string name="updates_later">Later</string>
     <string name="updates_download_error">Download failed</string>
     <string name="updates_no_apk">This release has no APK attached</string>
+    <string name="updates_downloaded">Download complete. Ready to install.</string>
+    <string name="updates_download_size">%1$s / %2$s MB</string>
+    <string name="updates_downloading_size">Downloading… %1$s MB</string>
+    <string name="updates_connecting">Connecting…</string>
+    <string name="updates_changelog">What’s new</string>
     <string name="backups_title">Backups</string>
     <string name="backups_empty">No backups yet</string>
     <string name="backups_empty_hint">Backups appear here after you change metadata or artwork.</string>
+    <string name="backups_disabled_title">Backups are off</string>
+    <string name="backups_disabled_body">Kover does not save originals. Enable backups in Settings to be able to restore artwork or metadata after changes.</string>
+    <string name="backups_open_settings">Open settings</string>
     <string name="backups_field_title">Previous values</string>
     <string name="backups_restore">Restore</string>
     <string name="backups_restored">Restored</string>

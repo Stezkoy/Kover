@@ -28,6 +28,7 @@ data class UpdateInfo(
     val url: String,
     val notes: String,
     val apkUrl: String? = null,
+    val apkSize: Long = 0L,
 )
 
 /**
@@ -53,6 +54,10 @@ class UpdateRepository @Inject constructor(
     var isDownloading by mutableStateOf(false)
         private set
     var progress by mutableStateOf(0f)
+        private set
+    var downloadedBytes by mutableStateOf(0L)
+        private set
+    var totalBytes by mutableStateOf(0L)
         private set
     var downloadedFile by mutableStateOf<File?>(null)
         private set
@@ -115,13 +120,23 @@ class UpdateRepository @Inject constructor(
             val tag = root["tag_name"]?.jsonPrimitive?.content ?: return null
             val url = root["html_url"]?.jsonPrimitive?.content ?: ""
             val notes = root["body"]?.jsonPrimitive?.content.orEmpty()
-            val apkUrl = root["assets"]?.jsonArray.orEmpty()
+            val apkAsset = root["assets"]?.jsonArray.orEmpty()
                 .firstOrNull { asset ->
                     asset.jsonObject["name"]?.jsonPrimitive?.content
                         ?.endsWith(".apk", ignoreCase = true) == true
                 }
-                ?.jsonObject?.get("browser_download_url")?.jsonPrimitive?.content
-            return UpdateInfo(version = tag, url = url, notes = notes, apkUrl = apkUrl)
+                ?.jsonObject
+            val apkUrl = apkAsset?.get("browser_download_url")?.jsonPrimitive?.content
+            val apkSize = apkAsset?.get("size")?.jsonPrimitive?.content?.toLongOrNull() ?: 0L
+            return UpdateInfo(
+                version = tag,
+                url = url,
+                notes = notes,
+                apkUrl = apkUrl,
+                apkSize = apkSize,
+            ).also {
+                android.util.Log.d("UpdateRepository", "latest $tag apkSize=$apkSize")
+            }
         }
     }
 
@@ -135,6 +150,8 @@ class UpdateRepository @Inject constructor(
         if (isDownloading) return
         isDownloading = true
         progress = 0f
+        downloadedBytes = 0L
+        totalBytes = 0L
         downloadError = null
         downloadedFile = null
         try {
@@ -148,8 +165,17 @@ class UpdateRepository @Inject constructor(
                 httpClient.newCall(request).execute().use { response ->
                     if (!response.isSuccessful) error("HTTP ${response.code}")
                     val body = response.body ?: error("empty body")
-                    val total = body.contentLength().coerceAtLeast(0L)
+                    val total = response.header("Content-Length")?.toLongOrNull()
+                        ?.takeIf { it > 0 }
+                        ?: body.contentLength().takeIf { it > 0 }
+                        ?: info.apkSize
+                    android.util.Log.d(
+                        "UpdateRepository",
+                        "download total=$total apkAsset=${info.apkSize}",
+                    )
+                    withContext(Dispatchers.Main) { totalBytes = total }
                     var read = 0L
+                    var lastUiUpdate = 0L
                     body.byteStream().use { input ->
                         target.outputStream().use { output ->
                             val buffer = ByteArray(64 * 1024)
@@ -158,9 +184,22 @@ class UpdateRepository @Inject constructor(
                                 if (n < 0) break
                                 output.write(buffer, 0, n)
                                 read += n
-                                if (total > 0) progress = (read.toFloat() / total).coerceIn(0f, 1f)
+                                if (read - lastUiUpdate >= 256 * 1024) {
+                                    lastUiUpdate = read
+                                    val percent = if (total > 0) {
+                                        (read.toFloat() / total).coerceIn(0f, 1f)
+                                    } else 0f
+                                    withContext(Dispatchers.Main) {
+                                        downloadedBytes = read
+                                        progress = percent
+                                    }
+                                }
                             }
                         }
+                    }
+                    withContext(Dispatchers.Main) {
+                        downloadedBytes = read
+                        progress = 1f
                     }
                     if (target.length() < 1024) error("downloaded file is too small")
                     downloadedFile = target
@@ -202,6 +241,8 @@ class UpdateRepository @Inject constructor(
     fun resetDownload() {
         downloadedFile = null
         progress = 0f
+        downloadedBytes = 0L
+        totalBytes = 0L
         downloadError = null
     }
 

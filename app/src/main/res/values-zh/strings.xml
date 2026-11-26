@@ -233,9 +233,17 @@
     <string name="updates_later">稍后</string>
     <string name="updates_download_error">下载失败</string>
     <string name="updates_no_apk">此发布未附带 APK</string>
+    <string name="updates_downloaded">下载完成，可以安装。</string>
+    <string name="updates_download_size">%1$s / %2$s MB</string>
+    <string name="updates_downloading_size">下载中… %1$s MB</string>
+    <string name="updates_connecting">连接中…</string>
+    <string name="updates_changelog">更新内容</string>
     <string name="backups_title">备份</string>
     <string name="backups_empty">暂无备份</string>
     <string name="backups_empty_hint">修改元数据或图片后，备份会出现在这里。</string>
+    <string name="backups_disabled_title">备份已关闭</string>
+    <string name="backups_disabled_body">Kover 不保留原始文件。请在设置中开启备份，以便修改后恢复图片或元数据。</string>
+    <string name="backups_open_settings">打开设置</string>
     <string name="backups_field_title">之前的值</string>
     <string name="backups_restore">恢复</string>
     <string name="backups_restored">已恢复</string>

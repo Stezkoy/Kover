@@ -1,15 +1,13 @@
 package com.ark.kover.ui.components
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -20,18 +18,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ark.kover.R
 import com.ark.kover.core.update.UpdateRepository
 import com.ark.kover.ui.theme.Dimens
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 /**
- * Popup shown once a newer release is found: download in-app with progress,
- * then hand the APK to the system installer.
+ * Popup shown once a newer release is found: download in-app with a visible
+ * progress bar, then hand the APK to the system installer.
+ *
+ * Release notes are not rendered here (they take too much room) — a link to
+ * the release page is shown instead.
  */
 @Composable
 fun UpdateDialog(updates: UpdateRepository) {
@@ -39,17 +41,16 @@ fun UpdateDialog(updates: UpdateRepository) {
     var dismissedVersion by remember { mutableStateOf<String?>(null) }
     if (info == null || !updates.isUpdateAvailable() || dismissedVersion == info.version) return
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val downloaded = updates.downloadedFile
+
     AlertDialog(
         onDismissRequest = { dismissedVersion = info.version },
         title = { Text(stringResource(R.string.updates_dialog_title, info.version)) },
         text = {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 300.dp)
-                    .verticalScroll(rememberScrollState()),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(Dimens.Gap6),
             ) {
                 Text(
@@ -57,25 +58,57 @@ fun UpdateDialog(updates: UpdateRepository) {
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                if (info.notes.isNotBlank()) {
-                    Text(
-                        text = info.notes.take(1200),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
+
                 if (updates.isDownloading) {
-                    LinearProgressIndicator(
-                        progress = { updates.progress },
+                    if (updates.totalBytes > 0) {
+                        LinearProgressIndicator(
+                            progress = { updates.progress },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    } else {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                    )
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = when {
+                                updates.downloadedBytes == 0L ->
+                                    stringResource(R.string.updates_connecting)
+                                updates.totalBytes > 0 -> stringResource(
+                                    R.string.updates_downloading,
+                                    (updates.progress * 100).toInt(),
+                                )
+                                else -> stringResource(
+                                    R.string.updates_downloading_size,
+                                    mb(updates.downloadedBytes),
+                                )
+                            },
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                        if (updates.totalBytes > 0) {
+                            Text(
+                                text = stringResource(
+                                    R.string.updates_download_size,
+                                    mb(updates.downloadedBytes),
+                                    mb(updates.totalBytes),
+                                ),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+
+                if (downloaded != null && !updates.isDownloading) {
                     Text(
-                        text = stringResource(
-                            R.string.updates_downloading,
-                            (updates.progress * 100).toInt(),
-                        ),
-                        style = MaterialTheme.typography.labelSmall,
+                        text = stringResource(R.string.updates_downloaded),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
+
                 updates.downloadError?.let {
                     Text(
                         text = if (info.apkUrl == null) stringResource(R.string.updates_no_apk)
@@ -84,6 +117,20 @@ fun UpdateDialog(updates: UpdateRepository) {
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
+
+                DialogButton(
+                    label = stringResource(R.string.updates_changelog),
+                    accent = true,
+                    onClick = {
+                        if (info.url.isNotBlank()) {
+                            runCatching {
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(info.url)),
+                                )
+                            }
+                        }
+                    },
+                )
             }
         },
         confirmButton = {
@@ -108,8 +155,15 @@ fun UpdateDialog(updates: UpdateRepository) {
     )
 }
 
+private fun mb(bytes: Long): String =
+    String.format(Locale.getDefault(), "%.1f", bytes / 1048576.0)
+
 @Composable
-private fun DialogButton(label: String, onClick: () -> Unit) {
+private fun DialogButton(
+    label: String,
+    accent: Boolean = false,
+    onClick: () -> Unit,
+) {
     FocusableCard(
         onClick = onClick,
         modifier = Modifier.height(34.dp),
@@ -118,7 +172,7 @@ private fun DialogButton(label: String, onClick: () -> Unit) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = if (focused) MaterialTheme.colorScheme.primary
+            color = if (focused || accent) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.onSurface,
         )
     }
