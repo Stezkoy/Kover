@@ -162,6 +162,9 @@
     <!-- Launcher -->
     <string name="launcher_title">Launcher</string>
     <string name="launcher_hint">Kover writes metadata and artwork directly into the launcher folder.</string>
+    <string name="launcher_howto">How to set up</string>
+    <string name="launcher_import_hint">ES-DE, NeoStation and Custom are written directly. Cocoon and Daijisho are import-only — open their cards for detailed steps.</string>
+    <string name="launcher_import_subtitle">Import from ES-DE (no direct sync)</string>
     <string name="launcher_dir">ES-DE folder</string>
     <string name="launcher_data_dir">Data folder</string>
     <string name="launcher_pick_data_dir">Choose data folder</string>
@@ -176,10 +179,11 @@
     <string name="custom_subtitle">Your own folder: gamelists + media, all 11 slots</string>
     <string name="custom_hint">Kover creates gamelists/{system}/gamelist.xml and media/{system}/{slot}/ inside the folder you choose.</string>
     <string name="custom_no_folder">Custom folder is not set. Open Launchers - Custom and pick an empty folder.</string>
-    <string name="cocoon_info_title">Cocoon</string>
-    <string name="cocoon_info_body">Cocoon keeps its database in private app storage, so Kover cannot edit it directly. Turn on ES-DE integration inside Cocoon: it imports gamelists and artwork from the ES-DE folder, so changes made here show up after Cocoon syncs.</string>
-    <string name="cocoon_via_esde">via ES-DE</string>
-    <string name="cocoon_subtitle">Imported through Cocoon’s own ES-DE integration</string>
+    <string name="cocoon_info_body">Cocoon keeps metadata in a private Room database, and its media filenames are tied to database ids. Kover cannot write there, so it works through the ES-DE folder instead.</string>
+    <string name="cocoon_howto">1. Switch Kover to the ES-DE launcher and edit the fields or artwork you need.\n2. In Cocoon, open ES-DE integration (compatibility import).\n3. Point it to the same ES-DE folder and run the import or sync.\n4. Repeat the import after further Kover changes.</string>
+    <string name="daijisho_title">Daijisho</string>
+    <string name="daijisho_info_body">Daijisho keeps its library in a private Room database and offers no API or content provider, so Kover cannot write to it. Data is brought over by importing from ES-DE.</string>
+    <string name="daijisho_howto">1. Keep your library in Kover’s ES-DE mode so metadata and artwork land in its folder.\n2. In Daijisho, add the platform and sync its ROM folder.\n3. Open the platform → Edit → Import Metadata and pick ES-DE/gamelists/{system}/gamelist.xml.\n4. Then use Import Preview Media: covers from downloaded_media/{system}/covers, screenshots from screenshots and titles from titlescreens.\n5. Repeat the import after Kover changes.</string>
     <string name="launcher_unsupported">This launcher is not supported yet.</string>
 
     <!-- Settings -->
@@ -277,7 +281,8 @@
     <string name="about_launchers">Supported launchers</string>
     <string name="about_launcher_esde">gamelist.xml + downloaded_media</string>
     <string name="about_launcher_neostation">data.sqlite + media folders</string>
-    <string name="about_launcher_cocoon">Through Cocoon’s own ES-DE import</string>
+    <string name="about_launcher_custom">gamelists + media in your own folder</string>
+    <string name="about_launcher_via_esde_import">Through ES-DE import</string>
     <string name="about_build">Version %1$s (%2$d)</string>
     <string name="about_libretro_desc">Box art, screenshots and title screens, no key required.</string>
     <string name="about_steam_desc">Descriptions and artwork from the Steam Store, no key required.</string>

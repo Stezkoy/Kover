@@ -46,6 +46,11 @@ fun LauncherListScreen(
             style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
             color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Text(
+            text = stringResource(R.string.launcher_import_hint),
+            style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         ActionRow(
             title = "ES-DE",
             subtitle = stringResource(R.string.launcher_dir),
@@ -78,9 +83,13 @@ fun LauncherListScreen(
         )
         ActionRow(
             title = "Cocoon",
-            subtitle = stringResource(R.string.cocoon_subtitle),
-            trailing = stringResource(R.string.cocoon_via_esde),
+            subtitle = stringResource(R.string.launcher_import_subtitle),
             onClick = { onLauncherClick("cocoon") },
+        )
+        ActionRow(
+            title = stringResource(R.string.daijisho_title),
+            subtitle = stringResource(R.string.launcher_import_subtitle),
+            onClick = { onLauncherClick("daijisho") },
         )
     }
 }

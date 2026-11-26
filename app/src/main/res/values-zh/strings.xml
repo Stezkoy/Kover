@@ -160,7 +160,10 @@
 
     <!-- Launcher -->
     <string name="launcher_title">启动器</string>
-    <string name="launcher_hint">Kover 会把元数据和图片直接写入启动器文件夹。</string>
+    <string name="launcher_hint">Kover 会直接把元数据和图片写入启动器文件夹。</string>
+    <string name="launcher_howto">如何设置</string>
+    <string name="launcher_import_hint">ES-DE、NeoStation 和 Custom 会直接写入。Cocoon 和 Daijisho 只能通过导入更新；请打开它们的卡片查看详细步骤。</string>
+    <string name="launcher_import_subtitle">从 ES-DE 导入（无直接同步）</string>
     <string name="launcher_dir">ES-DE 文件夹</string>
     <string name="launcher_data_dir">数据文件夹</string>
     <string name="launcher_pick_data_dir">选择数据文件夹</string>
@@ -168,17 +171,18 @@
     <string name="launcher_not_set">未设置</string>
     <string name="launcher_other">其他</string>
     <string name="launcher_other_hint">以后支持其他启动器</string>
-    <string name="neostation_subtitle">SQLite 库：元数据与封面</string>
+    <string name="neostation_subtitle">SQLite 游戏库：元数据和图片</string>
     <string name="neostation_hint">NeoStation 将 data.sqlite 和媒体保存在 NeoStation 文件夹。保存前请关闭 NeoStation，以便它重新读取数据库。</string>
     <string name="neostation_autodetect">自动查找文件夹</string>
     <string name="neostation_no_folder">未设置 NeoStation 文件夹。请打开“启动器”→“NeoStation”并选择 NeoStation 文件夹。</string>
     <string name="custom_subtitle">自定义文件夹：gamelists + media，全部 11 个槽位</string>
     <string name="custom_hint">Kover 会在所选文件夹中创建 gamelists/{system}/gamelist.xml 和 media/{system}/{slot}/。</string>
     <string name="custom_no_folder">未设置 Custom 文件夹。请打开“启动器”→ Custom 并选择空文件夹。</string>
-    <string name="cocoon_info_title">Cocoon</string>
-    <string name="cocoon_info_body">Cocoon 的数据库位于应用私有存储，Kover 无法直接修改。请在 Cocoon 中开启 ES-DE 集成：它会从 ES-DE 文件夹导入游戏列表和图片，同步后即可看到修改。</string>
-    <string name="cocoon_via_esde">通过 ES-DE</string>
-    <string name="cocoon_subtitle">通过 Cocoon 自带的 ES-DE 集成导入</string>
+    <string name="cocoon_info_body">Cocoon 将元数据保存在私有 Room 数据库中，封面文件名与数据库 ID 绑定。Kover 无法直接写入，只能通过 ES-DE 文件夹同步。</string>
+    <string name="cocoon_howto">1. 在 Kover 中切换到 ES-DE 启动器，编辑需要的字段或图片。\n2. 在 Cocoon 中打开 ES-DE integration（compatibility import）。\n3. 选择同一个 ES-DE 文件夹并运行导入或同步。\n4. 之后在 Kover 中修改后需要重新导入。</string>
+    <string name="daijisho_title">Daijisho</string>
+    <string name="daijisho_info_body">Daijisho 将游戏库保存在私有 Room 数据库中，且没有提供可写入的 API 或 ContentProvider。因此只能从 ES-DE 导入数据。</string>
+    <string name="daijisho_howto">1. 在 Kover 的 ES-DE 模式下维护游戏库，元数据和图片会写入 ES-DE 文件夹。\n2. 在 Daijisho 中添加平台并同步 ROM 文件夹。\n3. 打开平台 → Edit → Import Metadata，选择 ES-DE/gamelists/{system}/gamelist.xml。\n4. 然后使用 Import Preview Media：封面来自 downloaded_media/{system}/covers，截图来自 screenshots，标题图来自 titlescreens。\n5. 在 Kover 中修改后需要重新导入。</string>
     <string name="launcher_unsupported">暂不支持该启动器。</string>
 
     <!-- Settings -->
@@ -276,7 +280,8 @@
     <string name="about_launchers">支持的启动器</string>
     <string name="about_launcher_esde">gamelist.xml + downloaded_media</string>
     <string name="about_launcher_neostation">data.sqlite + 媒体文件夹</string>
-    <string name="about_launcher_cocoon">通过 Cocoon 自带的 ES-DE 导入</string>
+    <string name="about_launcher_custom">自有文件夹中的 gamelists + media</string>
+    <string name="about_launcher_via_esde_import">通过 ES-DE 导入</string>
     <string name="about_build">版本 %1$s (%2$d)</string>
     <string name="about_libretro_desc">封面、截图和标题画面，无需密钥。</string>
     <string name="about_steam_desc">来自 Steam 商店的描述和图片，无需密钥。</string>

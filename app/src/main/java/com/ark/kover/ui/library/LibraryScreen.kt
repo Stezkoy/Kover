@@ -23,9 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -107,7 +104,6 @@ fun LibraryScreen(
     val firstFocus = rememberInitialFocus()
     val launcher = settings.launcherType
     val extraSystemIds = EsDeSlots.extrasFor(launcher)
-    var showCocoonInfo by remember { mutableStateOf(false) }
 
     LaunchedEffect(romDirUri, launcher) {
         if (romDirUri.isNotBlank()) {
@@ -158,11 +154,6 @@ fun LibraryScreen(
                 selected = launcher == "custom",
                 onClick = { viewModel.setLauncher("custom") },
             )
-            LauncherChip(
-                label = "Cocoon",
-                selected = false,
-                onClick = { showCocoonInfo = true },
-            )
             if (repo.isScanning) {
                 CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp)
                 Text(
@@ -171,28 +162,6 @@ fun LibraryScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-        }
-
-        if (showCocoonInfo) {
-            androidx.compose.material3.AlertDialog(
-                onDismissRequest = { showCocoonInfo = false },
-                title = { Text(stringResource(R.string.cocoon_info_title)) },
-                text = { Text(stringResource(R.string.cocoon_info_body)) },
-                confirmButton = {
-                    FocusableCard(
-                        onClick = { showCocoonInfo = false },
-                        modifier = Modifier.height(34.dp),
-                        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
-                    ) { focused ->
-                        Text(
-                            text = stringResource(R.string.common_close),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = if (focused) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurface,
-                        )
-                    }
-                },
-            )
         }
 
         when {

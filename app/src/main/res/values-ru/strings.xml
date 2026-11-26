@@ -159,7 +159,10 @@
 
     <!-- Launcher -->
     <string name="launcher_title">Лаунчер</string>
-    <string name="launcher_hint">Kover пишет метаданные и артворк прямо в папку лаунчера.</string>
+    <string name="launcher_hint">Kover пишет метаданные и арт прямо в папку лаунчера.</string>
+    <string name="launcher_howto">Как настроить</string>
+    <string name="launcher_import_hint">ES-DE, NeoStation и Custom пишутся напрямую. Cocoon и Daijisho — только через импорт; откройте их карточки для подробной инструкции.</string>
+    <string name="launcher_import_subtitle">Импорт из ES-DE (без прямой синхронизации)</string>
     <string name="launcher_dir">Папка ES-DE</string>
     <string name="launcher_data_dir">Папка данных</string>
     <string name="launcher_pick_data_dir">Выбрать папку данных</string>
@@ -167,17 +170,18 @@
     <string name="launcher_not_set">не выбрана</string>
     <string name="launcher_other">Другой</string>
     <string name="launcher_other_hint">Для других лаунчеров позже</string>
-    <string name="neostation_subtitle">Библиотека в SQLite: метаданные и артворк</string>
+    <string name="neostation_subtitle">Библиотека в SQLite: метаданные и арт</string>
     <string name="neostation_hint">NeoStation хранит data.sqlite и медиа в папке NeoStation. Закройте NeoStation перед сохранением, чтобы он перечитал базу.</string>
     <string name="neostation_autodetect">Найти папку автоматически</string>
     <string name="neostation_no_folder">Папка NeoStation не выбрана. Откройте «Лаунчеры» → NeoStation и укажите папку NeoStation.</string>
     <string name="custom_subtitle">Своя папка: gamelists + media, все 11 слотов</string>
     <string name="custom_hint">Kover создаёт gamelists/{system}/gamelist.xml и media/{system}/{slot}/ в выбранной папке.</string>
     <string name="custom_no_folder">Папка Custom не выбрана. Откройте «Лаунчеры» → Custom и укажите пустую папку.</string>
-    <string name="cocoon_info_title">Cocoon</string>
-    <string name="cocoon_info_body">Cocoon держит базу в приватном хранилище приложения, поэтому Kover не может править её напрямую. Включите в Cocoon интеграцию с ES-DE: он импортирует gamelist и артворк из папки ES-DE, и изменения появятся после синхронизации.</string>
-    <string name="cocoon_via_esde">через ES-DE</string>
-    <string name="cocoon_subtitle">Импорт через интеграцию ES-DE в самом Cocoon</string>
+    <string name="cocoon_info_body">Cocoon держит метаданные в приватной Room-базе, а имена файлов обложек привязаны к id записей. Напрямую туда не записать, поэтому Kover работает через папку ES-DE.</string>
+    <string name="cocoon_howto">1. Переключите Kover на лаунчер ES-DE и отредактируйте нужные поля или арт.\n2. В Cocoon откройте ES-DE integration (compatibility import).\n3. Укажите ту же папку ES-DE и запустите импорт или синхронизацию.\n4. После новых правок в Kover импорт нужно повторить.</string>
+    <string name="daijisho_title">Daijisho</string>
+    <string name="daijisho_info_body">Daijisho хранит библиотеку в приватной Room-базе и не даёт API или content provider для записи. Поэтому данные переносятся импортом из ES-DE.</string>
+    <string name="daijisho_howto">1. Ведите библиотеку в Kover в режиме ES-DE: метаданные и арт попадут в его папку.\n2. В Daijisho добавьте платформу и синхронизируйте папку с ROM.\n3. Откройте платформу → Edit → Import Metadata и выберите ES-DE/gamelists/{system}/gamelist.xml.\n4. Затем Import Preview Media: обложки — downloaded_media/{system}/covers, скриншоты — screenshots, титульники — titlescreens.\n5. После изменений в Kover импорт нужно повторить.</string>
     <string name="launcher_unsupported">Этот лаунчер пока не поддерживается.</string>
 
     <!-- Settings -->
@@ -275,7 +279,8 @@
     <string name="about_launchers">Поддерживаемые лаунчеры</string>
     <string name="about_launcher_esde">gamelist.xml + downloaded_media</string>
     <string name="about_launcher_neostation">data.sqlite + папки медиа</string>
-    <string name="about_launcher_cocoon">Через импорт ES-DE в самом Cocoon</string>
+    <string name="about_launcher_custom">gamelists + media в своей папке</string>
+    <string name="about_launcher_via_esde_import">Через импорт из ES-DE</string>
     <string name="about_build">Версия %1$s (%2$d)</string>
     <string name="about_libretro_desc">Обложки, скриншоты и титульники, без ключа.</string>
     <string name="about_steam_desc">Описания и артворк из Steam Store, без ключа.</string>

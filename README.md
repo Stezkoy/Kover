@@ -40,6 +40,7 @@ what you already had and take hours. Kover works the other way around:
 | **NeoStation** | `data.sqlite` (metadata) + `media/{system}/{slot}` |
 | **Custom** | its own tidy folder: `gamelists/{system}/gamelist.xml` + `media/{system}/{slot}` |
 | **Cocoon** | not written directly — pick up changes through Cocoon's own ES-DE import |
+| **Daijisho** | not written directly — import `gamelist.xml` and media folders through Daijisho's ES-DE/Skraper import |
 
 Switching between launchers takes one tap; each remembers its own data folder.
 
@@ -154,7 +155,7 @@ See [LICENSE](LICENSE). Third-party components and their licenses are listed in
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 Game titles, cover art and trademarks belong to their respective owners. Kover is not affiliated
-with ES-DE, NeoStation, Cocoon, NeoAssets, SteamGridDB, Steam, RAWG or ScreenScraper.
+with ES-DE, NeoStation, Cocoon, Daijisho, NeoAssets, SteamGridDB, Steam, RAWG or ScreenScraper.
 
 ## Links
 

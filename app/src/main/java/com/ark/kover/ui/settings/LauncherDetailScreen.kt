@@ -3,10 +3,12 @@ package com.ark.kover.ui.settings
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +22,7 @@ import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
+import com.ark.kover.ui.theme.Dimens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -83,6 +86,7 @@ fun LauncherDetailScreen(
         "neostation" -> "NeoStation"
         "custom" -> "Custom"
         "cocoon" -> "Cocoon"
+        "daijisho" -> "Daijisho"
         "emudeck" -> "EmuDeck"
         else -> stringResource(R.string.nav_launcher)
     }
@@ -94,9 +98,28 @@ fun LauncherDetailScreen(
         onBack = onBack,
     ) {
         Text(title, style = MaterialTheme.typography.titleMedium)
-        if (launcherId == "cocoon") {
+        if (launcherId == "cocoon" || launcherId == "daijisho") {
+            val intro = if (launcherId == "cocoon") {
+                R.string.cocoon_info_body
+            } else {
+                R.string.daijisho_info_body
+            }
+            val howto = if (launcherId == "cocoon") {
+                R.string.cocoon_howto
+            } else {
+                R.string.daijisho_howto
+            }
             Text(
-                text = stringResource(R.string.cocoon_info_body),
+                text = stringResource(intro),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            SectionTitle(
+                text = stringResource(R.string.launcher_howto),
+                modifier = Modifier.padding(top = Dimens.Gap6),
+            )
+            Text(
+                text = stringResource(howto),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
