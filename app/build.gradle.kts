@@ -22,8 +22,8 @@ fun appSecret(name: String): String =
 
 // Release build version can be overridden for local test builds:
 //   .\gradlew assembleRelease -PkoverVersionName=0.1.0 -PkoverVersionCode=1
-val koverVersionName = (project.findProperty("koverVersionName") as String?) ?: "0.3.0"
-val koverVersionCode = (project.findProperty("koverVersionCode") as String?)?.toIntOrNull() ?: 6
+val koverVersionName = (project.findProperty("koverVersionName") as String?) ?: "0.3.1"
+val koverVersionCode = (project.findProperty("koverVersionCode") as String?)?.toIntOrNull() ?: 7
 
 val releaseStoreFile = localProps.getProperty("KOVER_STORE_FILE")
     ?: System.getenv("KOVER_STORE_FILE")
