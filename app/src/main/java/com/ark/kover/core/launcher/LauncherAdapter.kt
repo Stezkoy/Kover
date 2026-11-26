@@ -29,6 +29,25 @@ interface LauncherAdapter {
         romRelativePath: String,
     ): Metadata?
 
+    /**
+     * Batch variant for bulk tools (auto-translate): reads metadata for many ROMs of one
+     * system at once. Implementations should parse the source once instead of per ROM.
+     * The returned map is keyed by [Rom.relativePath].
+     */
+    suspend fun readMetadataForSystem(
+        resolver: ContentResolver,
+        launcherDirUri: Uri,
+        system: String,
+        roms: List<Rom>,
+    ): Map<String, Metadata> {
+        val result = mutableMapOf<String, Metadata>()
+        roms.forEach { rom ->
+            readMetadata(resolver, launcherDirUri, system, rom.relativePath)
+                ?.let { result[rom.relativePath] = it }
+        }
+        return result
+    }
+
     /** Read existing assets for a ROM from the launcher's media folder. */
     suspend fun readAssets(
         resolver: ContentResolver,

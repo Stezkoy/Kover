@@ -92,17 +92,39 @@ class CustomAdapter(
         val doc = parse(gamelistFile(root, system)) ?: return@withContext null
         val rel = pathInSystem(system, romRelativePath)
         val game = findGame(doc, rel) ?: return@withContext null
-        Metadata(
-            name = text(game, "name"),
-            desc = text(game, "description"),
-            rating = text(game, "rating").toFloatOrNull()?.coerceIn(0f, 1f) ?: 0f,
-            releaseDate = text(game, "releasedate"),
-            developer = text(game, "developer"),
-            publisher = text(game, "publisher"),
-            genre = text(game, "genre"),
-            players = text(game, "players"),
-        )
+        metadata(game)
     }
+
+    override suspend fun readMetadataForSystem(
+        resolver: ContentResolver,
+        launcherDirUri: Uri,
+        system: String,
+        roms: List<Rom>,
+    ): Map<String, Metadata> = withContext(Dispatchers.IO) {
+        val root = root(launcherDirUri) ?: return@withContext emptyMap()
+        val doc = parse(gamelistFile(root, system)) ?: return@withContext emptyMap()
+        val games = doc.getElementsByTagName("game")
+        val byPath = mutableMapOf<String, Element>()
+        for (i in 0 until games.length) {
+            val game = games.item(i) as? Element ?: continue
+            val path = text(game, "path").removePrefix("./")
+            if (path.isNotBlank()) byPath[path] = game
+        }
+        roms.mapNotNull { rom ->
+            byPath[pathInSystem(system, rom.relativePath)]?.let { rom.relativePath to metadata(it) }
+        }.toMap()
+    }
+
+    private fun metadata(game: Element): Metadata = Metadata(
+        name = text(game, "name"),
+        desc = text(game, "description"),
+        rating = text(game, "rating").toFloatOrNull()?.coerceIn(0f, 1f) ?: 0f,
+        releaseDate = text(game, "releasedate"),
+        developer = text(game, "developer"),
+        publisher = text(game, "publisher"),
+        genre = text(game, "genre"),
+        players = text(game, "players"),
+    )
 
     override suspend fun writeMetadata(
         resolver: ContentResolver,

@@ -50,6 +50,14 @@ class SwitchableLauncherAdapter(
         romRelativePath: String,
     ): Metadata? = pick().readMetadata(resolver, launcherDirUri, system, romRelativePath)
 
+    override suspend fun readMetadataForSystem(
+        resolver: ContentResolver,
+        launcherDirUri: Uri,
+        system: String,
+        roms: List<Rom>,
+    ): Map<String, Metadata> =
+        pick().readMetadataForSystem(resolver, launcherDirUri, system, roms)
+
     override suspend fun readAssets(
         resolver: ContentResolver,
         launcherDirUri: Uri,

@@ -8,7 +8,9 @@ import com.ark.kover.core.model.Asset
 import com.ark.kover.core.model.Metadata
 import com.ark.kover.core.model.Rom
 import com.ark.kover.core.settings.SettingsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -145,6 +147,35 @@ class EsDeAdapter @Inject constructor(
         } catch (e: Exception) {
             android.util.Log.e("EsDeAdapter", "readMetadata failed", e)
             null
+        }
+    }
+
+    /**
+     * Parses the system's gamelist once and maps entries to the scanned ROMs.
+     * Bulk tools used to call [readMetadata] per ROM, which re-read the whole XML each time.
+     */
+    override suspend fun readMetadataForSystem(
+        resolver: ContentResolver,
+        launcherDirUri: Uri,
+        system: String,
+        roms: List<Rom>,
+    ): Map<String, Metadata> = withContext(Dispatchers.IO) {
+        val launcherDir = resolveToUriFile(launcherDirUri) ?: return@withContext emptyMap()
+        val gamelist = java.io.File(launcherDir, "gamelists/$system/gamelist.xml")
+        if (!gamelist.isFile) return@withContext emptyMap()
+        try {
+            val doc = parseDocument(gamelist)
+            val byPath = doc.games.mapNotNull { entry ->
+                val path = gamelistPath(entry.field("path") ?: return@mapNotNull null)
+                path.lowercase() to entry
+            }.toMap()
+            roms.mapNotNull { rom ->
+                val target = romPathInGamelist(rom.relativePath, system)
+                byPath[target.lowercase()]?.let { rom.relativePath to it.toMetadata() }
+            }.toMap()
+        } catch (e: Exception) {
+            android.util.Log.e("EsDeAdapter", "readMetadataForSystem failed", e)
+            emptyMap()
         }
     }
 

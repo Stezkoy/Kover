@@ -1,6 +1,7 @@
 package com.ark.kover.ui.game
 
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,12 +43,14 @@ import com.ark.kover.core.launcher.LauncherAdapter
 import com.ark.kover.core.library.LibraryRepository
 import com.ark.kover.core.model.Metadata
 import com.ark.kover.core.model.Rom
+import com.ark.kover.core.network.hasInternet
 import com.ark.kover.core.scraper.Scraper
 import com.ark.kover.core.settings.AppSettings
 import com.ark.kover.core.settings.SettingsRepository
 import com.ark.kover.core.settings.launcherLabel
 import com.ark.kover.core.settings.launcherDirUri
 import com.ark.kover.core.translation.Translator
+import com.ark.kover.core.translation.TranslationOutcome
 import com.ark.kover.scraper.NeoAssetsScraper
 import com.ark.kover.scraper.SteamGridDbScraper
 import com.ark.kover.ui.components.ActionRow
@@ -59,6 +62,7 @@ import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.components.rememberInitialFocus
 import com.ark.kover.ui.theme.Dimens
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -72,6 +76,9 @@ sealed interface MetaMessage {
     data class Unsupported(val system: String) : MetaMessage
     data object Saved : MetaMessage
     data object Failed : MetaMessage
+    data object NoInternet : MetaMessage
+    data object TranslateFailed : MetaMessage
+    data object AlreadyTarget : MetaMessage
 }
 
 @HiltViewModel
@@ -87,6 +94,7 @@ class MetadataEditorViewModel @Inject constructor(
     private val steamStore: com.ark.kover.scraper.SteamStoreScraper,
     private val translator: Translator,
     private val backups: com.ark.kover.core.backup.BackupRepository,
+    @ApplicationContext private val appContext: Context,
 ) : ViewModel() {
 
     val settings = settingsRepo.settings
@@ -250,11 +258,25 @@ class MetadataEditorViewModel @Inject constructor(
 
     fun translate() {
         if (desc.isBlank()) return
+        if (!appContext.hasInternet()) {
+            message = MetaMessage.NoInternet
+            return
+        }
         isTranslating = true
+        message = MetaMessage.None
         viewModelScope.launch {
-            val translated = withContext(Dispatchers.IO) { translator.translate(desc, "auto", translateTarget) }
+            val outcome = withContext(Dispatchers.IO) {
+                translator.translateWithOutcome(desc, "auto", translateTarget)
+            }
             isTranslating = false
-            if (translated.isNotBlank() && translated != desc) desc = translated
+            when (outcome) {
+                is TranslationOutcome.Translated -> desc = outcome.text
+                TranslationOutcome.SameLanguage -> message = MetaMessage.AlreadyTarget
+                TranslationOutcome.Failed -> {
+                    message = if (!appContext.hasInternet()) MetaMessage.NoInternet
+                    else MetaMessage.TranslateFailed
+                }
+            }
         }
     }
 
@@ -617,6 +639,9 @@ private fun MetaStatus(message: MetaMessage) {    val (text, isError) = when (me
         MetaMessage.NoScrapers -> stringResource(R.string.scrapers_none_enabled) to true
         MetaMessage.Saved -> stringResource(R.string.meta_saved) to false
         MetaMessage.Failed -> stringResource(R.string.meta_failed) to true
+        MetaMessage.NoInternet -> stringResource(R.string.translate_no_internet) to true
+        MetaMessage.TranslateFailed -> stringResource(R.string.meta_translate_failed) to true
+        MetaMessage.AlreadyTarget -> stringResource(R.string.meta_translate_same) to false
         is MetaMessage.Unsupported -> stringResource(R.string.assets_source_unsupported, message.system) to false
     }
     Text(

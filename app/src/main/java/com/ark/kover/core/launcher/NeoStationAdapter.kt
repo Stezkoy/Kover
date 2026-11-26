@@ -192,27 +192,61 @@ class NeoStationAdapter(
                 arrayOf(sysId, file),
             ).use { c ->
                 if (!c.moveToFirst()) return@withContext null
-                val langs = linkedMapOf(
-                    "en" to c.getString(1).orEmpty(),
-                    "es" to c.getString(2).orEmpty(),
-                    "fr" to c.getString(3).orEmpty(),
-                    "de" to c.getString(4).orEmpty(),
-                    "it" to c.getString(5).orEmpty(),
-                    "pt" to c.getString(6).orEmpty(),
-                ).filterValues { it.isNotBlank() }
-                Metadata(
-                    name = c.getString(0).orEmpty(),
-                    desc = c.getString(1).orEmpty(),
-                    descByLang = langs,
-                    rating = (c.getDouble(7) / 20.0).toFloat().coerceIn(0f, 1f),
-                    releaseDate = parseDate(c.getString(8)),
-                    developer = c.getString(9).orEmpty(),
-                    publisher = c.getString(10).orEmpty(),
-                    genre = c.getString(11).orEmpty(),
-                    players = c.getString(12).orEmpty(),
-                )
+                metadataFrom(c)
             }
         }
+    }
+
+    override suspend fun readMetadataForSystem(
+        resolver: ContentResolver,
+        launcherDirUri: Uri,
+        system: String,
+        roms: List<Rom>,
+    ): Map<String, Metadata> = withContext(Dispatchers.IO) {
+        val launcherDir = root(launcherDirUri) ?: return@withContext emptyMap()
+        val database = db(launcherDir) ?: return@withContext emptyMap()
+        database.use { d ->
+            val sysId = if (isAndroid(system)) ANDROID_SYSTEM
+            else systemIds(d)[system.lowercase()] ?: return@withContext emptyMap()
+            val byFile = mutableMapOf<String, Metadata>()
+            d.rawQuery(
+                "SELECT filename, real_name, description_en, description_es, description_fr, " +
+                    "description_de, description_it, description_pt, rating, release_date, " +
+                    "developer, publisher, genre, players FROM user_screenscraper_metadata " +
+                    "WHERE app_system_id = ?",
+                arrayOf(sysId),
+            ).use { c ->
+                while (c.moveToNext()) {
+                    val file = c.getString(0) ?: continue
+                    byFile[file] = metadataFrom(c, 1)
+                }
+            }
+            roms.mapNotNull { rom ->
+                byFile[fileName(rom.relativePath)]?.let { rom.relativePath to it }
+            }.toMap()
+        }
+    }
+
+    private fun metadataFrom(c: android.database.Cursor, base: Int = 0): Metadata {
+        val langs = linkedMapOf(
+            "en" to c.getString(base + 1).orEmpty(),
+            "es" to c.getString(base + 2).orEmpty(),
+            "fr" to c.getString(base + 3).orEmpty(),
+            "de" to c.getString(base + 4).orEmpty(),
+            "it" to c.getString(base + 5).orEmpty(),
+            "pt" to c.getString(base + 6).orEmpty(),
+        ).filterValues { it.isNotBlank() }
+        return Metadata(
+            name = c.getString(base).orEmpty(),
+            desc = c.getString(base + 1).orEmpty(),
+            descByLang = langs,
+            rating = (c.getDouble(base + 7) / 20.0).toFloat().coerceIn(0f, 1f),
+            releaseDate = parseDate(c.getString(base + 8)),
+            developer = c.getString(base + 9).orEmpty(),
+            publisher = c.getString(base + 10).orEmpty(),
+            genre = c.getString(base + 11).orEmpty(),
+            players = c.getString(base + 12).orEmpty(),
+        )
     }
 
     override suspend fun writeMetadata(
