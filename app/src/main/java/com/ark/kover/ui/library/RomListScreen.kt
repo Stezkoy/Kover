@@ -42,6 +42,7 @@ import com.ark.kover.core.settings.launcherDirUri
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.EmptyState
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverChip
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.components.Thumb
@@ -248,19 +249,7 @@ private fun ViewModeChip(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    FocusableCard(
-        onClick = onClick,
-        selected = selected,
-        modifier = Modifier.height(26.dp),
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-    ) { focused ->
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (selected || focused) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
+    KoverChip(label = label, selected = selected, onClick = onClick)
 }
 
 private fun formatSize(bytes: Long): String = when {

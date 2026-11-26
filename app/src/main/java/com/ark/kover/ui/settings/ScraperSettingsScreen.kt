@@ -29,6 +29,8 @@ import com.ark.kover.core.settings.SettingsRepository
 import com.ark.kover.core.settings.isScraperEnabled
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverButton
+import com.ark.kover.ui.components.KoverButtonStyle
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.theme.Dimens
@@ -177,23 +179,16 @@ private fun ScraperRow(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
+            KoverButton(
+                label = stringResource(R.string.scrapers_configure),
+                onClick = onClick,
+                style = KoverButtonStyle.Text,
+            )
             Switch(
                 checked = enabled,
                 onCheckedChange = null,
                 modifier = Modifier.width(44.dp),
             )
-            FocusableCard(
-                onClick = onClick,
-                modifier = Modifier.height(28.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-            ) { buttonFocused ->
-                Text(
-                    text = stringResource(R.string.scrapers_configure),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = if (buttonFocused) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.onSurface,
-                )
-            }
         }
     }
 }

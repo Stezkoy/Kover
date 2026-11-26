@@ -1,6 +1,7 @@
 package com.ark.kover.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.ui.graphics.SolidColor
@@ -63,33 +65,160 @@ fun FocusableCard(
 ) {
     val interaction = remember { MutableInteractionSource() }
     val focused by interaction.collectIsFocusedAsState()
-    val accent = MaterialTheme.colorScheme.primary
+    val colors = MaterialTheme.colorScheme
+    val accent = colors.primary
     Surface(
         shape = shape,
         color = when {
-            focused -> accent.copy(alpha = 0.16f)
-            selected -> accent.copy(alpha = 0.10f)
-            else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            focused -> accent.copy(alpha = if (selected) 0.22f else 0.14f)
+            selected -> accent.copy(alpha = 0.20f)
+            else -> colors.surfaceVariant.copy(alpha = 0.55f)
         },
-        border = BorderStroke(
-            width = if (focused) Dimens.FocusBorder else 1.dp,
-            color = when {
-                focused -> accent
-                selected -> accent.copy(alpha = 0.5f)
-                else -> MaterialTheme.colorScheme.outlineVariant
-            },
-        ),
+        contentColor = colors.onSurface,
+        border = if (focused) BorderStroke(Dimens.FocusBorder, accent) else null,
         modifier = modifier
             .clip(shape)
             .clickable(
                 interactionSource = interaction,
-                indication = null,
+                indication = LocalIndication.current,
                 onClick = onClick,
             )
             .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier),
     ) {
         Box(modifier = Modifier.padding(contentPadding), contentAlignment = contentAlignment) {
             content(focused)
+        }
+    }
+}
+
+/**
+ * M3 filter/choice chip: tonal idle, primary-container selection, focus ring for gamepad.
+ * Selection never changes the label width (no checkmark, no font weight switch).
+ */
+@Composable
+fun KoverChip(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    focusRequester: FocusRequester? = null,
+) {
+    val interaction = remember { MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(8.dp)
+    Surface(
+        color = when {
+            !enabled -> colors.onSurface.copy(alpha = 0.12f)
+            selected -> colors.primaryContainer
+            else -> colors.surfaceVariant.copy(alpha = 0.55f)
+        },
+        contentColor = when {
+            !enabled -> colors.onSurface.copy(alpha = 0.38f)
+            selected -> colors.onPrimaryContainer
+            else -> colors.onSurfaceVariant
+        },
+        shape = shape,
+        border = if (focused && enabled) BorderStroke(Dimens.FocusBorder, colors.primary) else null,
+        modifier = modifier
+            .height(32.dp)
+            .clip(shape)
+            .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                enabled = enabled,
+                onClick = onClick,
+            ),
+    ) {
+        Box(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                maxLines = 1,
+            )
+        }
+    }
+}
+
+enum class KoverButtonStyle { Primary, Secondary, Text }
+
+/** Filled/tonal/text action button with an M3 focus ring and disabled state. */
+@Composable
+fun KoverButton(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    style: KoverButtonStyle = KoverButtonStyle.Primary,
+    destructive: Boolean = false,
+    compact: Boolean = false,
+    focusRequester: FocusRequester? = null,
+) {
+    val interaction = remember { MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    val colors = MaterialTheme.colorScheme
+    val shape = if (style == KoverButtonStyle.Text) RoundedCornerShape(8.dp)
+    else RoundedCornerShape(Dimens.CardCorner)
+    val container = when {
+        !enabled -> if (style == KoverButtonStyle.Text) Color.Transparent
+        else colors.onSurface.copy(alpha = 0.12f)
+        style == KoverButtonStyle.Text ->
+            if (focused) colors.primary.copy(alpha = 0.10f) else Color.Transparent
+        destructive -> colors.errorContainer
+        style == KoverButtonStyle.Primary -> colors.primary
+        else -> colors.primaryContainer
+    }
+    val content = when {
+        !enabled -> colors.onSurface.copy(alpha = 0.38f)
+        destructive -> colors.onErrorContainer
+        style == KoverButtonStyle.Primary -> colors.onPrimary
+        style == KoverButtonStyle.Secondary -> colors.onPrimaryContainer
+        else -> colors.primary
+    }
+    val ring = when {
+        destructive -> colors.onErrorContainer
+        style == KoverButtonStyle.Primary -> colors.onPrimary
+        else -> colors.primary
+    }
+    Surface(
+        color = container,
+        contentColor = content,
+        shape = shape,
+        border = if (focused && enabled) BorderStroke(Dimens.FocusBorder, ring) else null,
+        modifier = modifier
+            .height(
+                when {
+                    compact -> 36.dp
+                    style == KoverButtonStyle.Text -> 36.dp
+                    else -> 40.dp
+                },
+            )
+            .clip(shape)
+            .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                enabled = enabled,
+                onClick = onClick,
+            ),
+    ) {
+        Box(
+            modifier = Modifier.padding(horizontal = if (compact) 10.dp else 16.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = label,
+                style = if (compact) MaterialTheme.typography.labelMedium
+                else MaterialTheme.typography.labelLarge,
+                fontWeight = if (style == KoverButtonStyle.Primary) FontWeight.SemiBold
+                else FontWeight.Medium,
+                maxLines = 1,
+            )
         }
     }
 }
@@ -156,10 +285,12 @@ fun ActionRow(
 @Composable
 fun SectionTitle(text: String, modifier: Modifier = Modifier) {
     Text(
-        text = text.uppercase(),
-        style = MaterialTheme.typography.labelSmall,
+        text = text,
+        style = MaterialTheme.typography.labelLarge,
         fontWeight = FontWeight.SemiBold,
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = modifier,
     )
 }

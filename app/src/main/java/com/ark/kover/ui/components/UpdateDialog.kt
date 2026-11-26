@@ -4,10 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -120,7 +118,6 @@ fun UpdateDialog(updates: UpdateRepository) {
 
                 DialogButton(
                     label = stringResource(R.string.updates_changelog),
-                    accent = true,
                     onClick = {
                         if (info.url.isNotBlank()) {
                             runCatching {
@@ -161,19 +158,11 @@ private fun mb(bytes: Long): String =
 @Composable
 private fun DialogButton(
     label: String,
-    accent: Boolean = false,
     onClick: () -> Unit,
 ) {
-    FocusableCard(
+    KoverButton(
+        label = label,
         onClick = onClick,
-        modifier = Modifier.height(34.dp),
-        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
-    ) { focused ->
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (focused || accent) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurface,
-        )
-    }
+        style = KoverButtonStyle.Text,
+    )
 }

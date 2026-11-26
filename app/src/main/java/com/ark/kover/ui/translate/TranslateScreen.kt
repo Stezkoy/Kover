@@ -840,7 +840,7 @@ private fun PrimaryAction(
     val interaction = remember { MutableInteractionSource() }
     val focused by interaction.collectIsFocusedAsState()
     val colors = MaterialTheme.colorScheme
-    val shape = RoundedCornerShape(50)
+    val shape = RoundedCornerShape(Dimens.CardCorner)
     val container = when {
         !enabled -> colors.onSurface.copy(alpha = 0.12f)
         destructive -> colors.errorContainer

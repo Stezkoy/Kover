@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -43,6 +44,9 @@ import com.ark.kover.core.update.UpdateRepository
 import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverButton
+import com.ark.kover.ui.components.KoverButtonStyle
+import com.ark.kover.ui.components.KoverChip
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.theme.AppThemePreset
@@ -186,22 +190,12 @@ fun GeneralSettingsScreen(
 
         // ---------------- backups ----------------
         SectionTitle(text = stringResource(R.string.settings_backups))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6),
-        ) {
-            Switch(
-                checked = settings.backupOnChange,
-                onCheckedChange = { viewModel.setBackupEnabled(it) },
-            )
-            Text(
-                text = stringResource(R.string.settings_backups_space_hint),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
-            )
-        }
+        SettingsToggleRow(
+            title = stringResource(R.string.settings_backups_toggle),
+            subtitle = stringResource(R.string.settings_backups_space_hint),
+            checked = settings.backupOnChange,
+            onCheckedChange = { viewModel.setBackupEnabled(it) },
+        )
 
         // ---------------- appearance ----------------
         SectionTitle(text = stringResource(R.string.settings_theme))
@@ -273,33 +267,19 @@ fun GeneralSettingsScreen(
 
         // ---------------- updates ----------------
         SectionTitle(text = stringResource(R.string.settings_updates))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6),
-        ) {
-            Switch(
-                checked = settings.updateCheckEnabled,
-                onCheckedChange = { viewModel.setAutoUpdate(it) },
-            )
-            Text(
-                text = stringResource(R.string.updates_auto),
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.weight(1f),
-            )
-            FocusableCard(
-                onClick = { viewModel.checkUpdates() },
-                modifier = Modifier.height(30.dp),
-                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-            ) { focused ->
-                Text(
-                    text = stringResource(R.string.updates_check),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = if (focused) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.onSurface,
+        SettingsToggleRow(
+            title = stringResource(R.string.updates_auto),
+            checked = settings.updateCheckEnabled,
+            onCheckedChange = { viewModel.setAutoUpdate(it) },
+            trailing = {
+                KoverButton(
+                    label = stringResource(R.string.updates_check),
+                    onClick = { viewModel.checkUpdates() },
+                    style = KoverButtonStyle.Text,
+                    compact = true,
                 )
-            }
-        }
+            },
+        )
         val latest = viewModel.updates.latest
         val checking = viewModel.updates.isChecking
         Text(
@@ -368,18 +348,57 @@ fun GeneralSettingsScreen(
 
 @Composable
 private fun OptionChip(label: String, selected: Boolean, onClick: () -> Unit) {
+    KoverChip(label = label, selected = selected, onClick = onClick)
+}
+
+/**
+ * Settings toggle row with the same layout as a scraper row: the whole card is
+ * clickable, the switch on the right is only an indicator (44dp wide).
+ */
+@Composable
+private fun SettingsToggleRow(
+    title: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    subtitle: String? = null,
+    trailing: (@Composable () -> Unit)? = null,
+) {
     FocusableCard(
-        onClick = onClick,
-        selected = selected,
-        modifier = Modifier.height(26.dp),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+        onClick = { onCheckedChange(!checked) },
+        modifier = Modifier.fillMaxWidth().height(52.dp),
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
     ) { focused ->
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (selected || focused) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6),
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (focused) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                )
+                if (subtitle != null) {
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    )
+                }
+            }
+            trailing?.invoke()
+            Switch(
+                checked = checked,
+                onCheckedChange = null,
+                modifier = Modifier.width(44.dp),
+            )
+        }
     }
 }
 

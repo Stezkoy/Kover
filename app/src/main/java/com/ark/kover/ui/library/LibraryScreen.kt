@@ -49,6 +49,7 @@ import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.EmptyState
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverChip
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.components.rememberInitialFocus
@@ -328,20 +329,12 @@ private fun LauncherChip(
     onClick: () -> Unit,
     focusRequester: androidx.compose.ui.focus.FocusRequester? = null,
 ) {
-    FocusableCard(
-        onClick = onClick,
+    KoverChip(
+        label = label,
         selected = selected,
-        modifier = Modifier.height(26.dp),
+        onClick = onClick,
         focusRequester = focusRequester,
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-    ) { focused ->
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (selected || focused) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
+    )
 }
 
 @Composable

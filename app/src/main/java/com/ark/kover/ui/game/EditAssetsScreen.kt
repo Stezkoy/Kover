@@ -69,6 +69,7 @@ import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.CompactTextField
 import com.ark.kover.ui.components.EmptyState
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverChip
 import com.ark.kover.ui.components.MediaThumb
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
@@ -381,19 +382,11 @@ fun EditAssetsScreen(
             ) {
                 items(viewModel.scrapers, key = { it.id }) { scraper ->
                     val selected = scraper.id == viewModel.scraperId
-                    FocusableCard(
-                        onClick = { viewModel.changeScraper(scraper.id) },
-                        modifier = Modifier.height(28.dp),
+                    KoverChip(
+                        label = scraper.displayName,
                         selected = selected,
-                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-                    ) { focused ->
-                        Text(
-                            text = scraper.displayName,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = if (selected || focused) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
+                        onClick = { viewModel.changeScraper(scraper.id) },
+                    )
                 }
             }
         }
@@ -493,20 +486,12 @@ fun EditAssetsScreen(
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(Dimens.Gap4)) {
                         items(categories, key = { it }) { kind ->
                             val selected = kind == viewModel.foundKind
-                            FocusableCard(
-                                onClick = { viewModel.foundKind = kind },
+                            KoverChip(
+                                label = slotLabel(kind) + " " +
+                                    (viewModel.found[kind]?.size ?: 0),
                                 selected = selected,
-                                modifier = Modifier.height(28.dp),
-                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-                            ) { focused ->
-                                Text(
-                                    text = slotLabel(kind) + " " +
-                                        (viewModel.found[kind]?.size ?: 0),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = if (selected || focused) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
+                                onClick = { viewModel.foundKind = kind },
+                            )
                         }
                     }
                 }

@@ -30,6 +30,8 @@ import com.ark.kover.core.settings.SettingsRepository
 import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverButton
+import com.ark.kover.ui.components.KoverButtonStyle
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.theme.Dimens
@@ -40,7 +42,13 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed interface TestResult {
-    data class Ok(val quotaRemaining: Int? = null, val quotaLimit: Int? = null, val guest: Boolean = false) : TestResult
+    data class Ok(
+        val quotaRemaining: Int? = null,
+        val quotaLimit: Int? = null,
+        val unlimited: Boolean = false,
+        val guest: Boolean = false,
+    ) : TestResult
+
     data class Error(val detail: String) : TestResult
 }
 
@@ -97,6 +105,7 @@ class ScraperDetailViewModel @Inject constructor(
                             TestResult.Ok(
                                 quotaRemaining = info.remaining,
                                 quotaLimit = info.limit,
+                                unlimited = info.unlimited,
                                 guest = info.subject != "user",
                             )
                         }
@@ -209,7 +218,7 @@ fun ScraperDetailScreen(
                     onClick = { openUrl(context, "https://neoassets.dev/app") },
                 )
                 SecretField(
-                    label = stringResource(R.string.neo_key_label),
+                    label = stringResource(R.string.scraper_key_label),
                     value = viewModel.field1,
                     onChange = { viewModel.field1 = it },
                 )
@@ -232,7 +241,7 @@ fun ScraperDetailScreen(
                     onClick = { openUrl(context, "https://www.steamgriddb.com/profile/preferences/api") },
                 )
                 SecretField(
-                    label = stringResource(R.string.scrapers_token),
+                    label = stringResource(R.string.scraper_key_label),
                     value = viewModel.field1,
                     onChange = { viewModel.field1 = it },
                 )
@@ -276,7 +285,7 @@ fun ScraperDetailScreen(
                     onClick = { openUrl(context, "https://rawg.io/apidocs") },
                 )
                 SecretField(
-                    label = stringResource(R.string.rawg_key_label),
+                    label = stringResource(R.string.scraper_key_label),
                     value = viewModel.field1,
                     onChange = { viewModel.field1 = it },
                 )
@@ -298,38 +307,18 @@ fun ScraperDetailScreen(
             androidx.compose.foundation.layout.Row(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6),
             ) {
-                FocusableCard(
+                KoverButton(
+                    label = if (viewModel.saved) stringResource(R.string.scrapers_saved)
+                    else stringResource(R.string.common_save),
                     onClick = { viewModel.save(scraperId) },
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                        horizontal = 10.dp,
-                        vertical = 0.dp,
-                    ),
-                ) { focused ->
-                    Text(
-                        text = if (viewModel.saved) stringResource(R.string.scrapers_saved)
-                        else stringResource(R.string.common_save),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (focused) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-                FocusableCard(
+                    style = KoverButtonStyle.Primary,
+                )
+                KoverButton(
+                    label = if (viewModel.testRunning) stringResource(R.string.scraper_testing)
+                    else stringResource(R.string.scraper_test),
                     onClick = { viewModel.test(scraperId) },
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                        horizontal = 10.dp,
-                        vertical = 0.dp,
-                    ),
-                ) { focused ->
-                    Text(
-                        text = if (viewModel.testRunning) stringResource(R.string.scraper_testing)
-                        else stringResource(R.string.scraper_test),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (focused) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurface,
-                    )
-                }
+                    style = KoverButtonStyle.Secondary,
+                )
             }
             TestStatus(viewModel.testResult)
         }
@@ -344,8 +333,9 @@ private fun TestStatus(result: TestResult?) {
     val text = when (result) {
         is TestResult.Ok -> {
             val parts = mutableListOf(okText)
-            if (result.quotaLimit != null && result.quotaRemaining != null) {
-                parts += stringResource(
+            when {
+                result.unlimited -> parts += stringResource(R.string.scraper_quota_unlimited)
+                result.quotaLimit != null && result.quotaRemaining != null -> parts += stringResource(
                     R.string.scraper_quota,
                     result.quotaRemaining,
                     result.quotaLimit,

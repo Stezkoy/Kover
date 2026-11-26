@@ -168,6 +168,12 @@ private fun SidebarRail(
         modifier = Modifier
             .width(railWidth)
             .fillMaxHeight()
+            .clip(
+                RoundedCornerShape(
+                    topEnd = Dimens.CardCorner,
+                    bottomEnd = Dimens.CardCorner,
+                ),
+            )
             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
             .padding(Dimens.SidebarPadding),
         verticalArrangement = Arrangement.spacedBy(Dimens.SidebarItemSpacing),

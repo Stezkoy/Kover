@@ -61,7 +61,10 @@ connection** button. Disabled scrapers disappear from the editors.
 
 - **Metadata**: name, description, rating, release date, developer, publisher, genre, players.
   “Use these values” fills the form from the chosen match; descriptions in several languages are
-  kept and can be translated (MyMemory) into your language.
+  kept and can be translated into your language.
+- **Auto-translate**: translate descriptions for whole platforms into the target language, with
+  statuses, progress, cancel and a report. The job continues if you leave the screen; originals
+  are kept when backups are enabled.
 - **Artwork**: all 11 ES-DE slots (covers, back covers, fanart, screenshots, videos, logos,
   title screens, manuals, 3D boxes, physical media, mix images). Results are grouped by source
   category, and **the source category is independent from the target slot** — a SteamGridDB icon

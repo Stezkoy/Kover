@@ -57,6 +57,9 @@ import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.CompactTextField
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverButton
+import com.ark.kover.ui.components.KoverButtonStyle
+import com.ark.kover.ui.components.KoverChip
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.components.rememberInitialFocus
@@ -423,13 +426,16 @@ fun EditMetadataScreen(
                     modifier = Modifier.fillMaxWidth().heightIn(min = 96.dp, max = 130.dp),
                 )
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6)) {
+                Row(
+                    modifier = Modifier.padding(top = Dimens.Gap8),
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6),
+                ) {
                     SecondaryAction(
                         text = if (viewModel.isTranslating) stringResource(R.string.common_translating)
                         else stringResource(R.string.common_translate, targetLanguageName(viewModel.translateTarget)),
                         onClick = { viewModel.translate() },
                         enabled = !viewModel.isTranslating,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1.15f),
                     )
                     SecondaryAction(
                         text = if (viewModel.isSaving) stringResource(R.string.meta_saving)
@@ -437,6 +443,7 @@ fun EditMetadataScreen(
                         onClick = { viewModel.save() },
                         enabled = !viewModel.isSaving,
                         modifier = Modifier.weight(1f),
+                        primary = true,
                         focusRequester = firstFocus,
                     )
                 }
@@ -477,19 +484,11 @@ fun EditMetadataScreen(
                 ) {
                     items(viewModel.scrapers, key = { it.id }) { scraper ->
                         val selected = scraper.id == viewModel.scraperId
-                        FocusableCard(
-                            onClick = { viewModel.changeScraper(scraper.id) },
-                            modifier = Modifier.height(28.dp),
+                        KoverChip(
+                            label = scraper.displayName,
                             selected = selected,
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-                        ) { focused ->
-                            Text(
-                                text = scraper.displayName,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = if (selected || focused) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                            onClick = { viewModel.changeScraper(scraper.id) },
+                        )
                     }
                 }
                 Row(
@@ -612,21 +611,18 @@ private fun SecondaryAction(
     onClick: () -> Unit,
     enabled: Boolean,
     modifier: Modifier = Modifier,
+    primary: Boolean = false,
     focusRequester: androidx.compose.ui.focus.FocusRequester? = null,
 ) {
-    FocusableCard(
-        onClick = { if (enabled) onClick() },
-        modifier = modifier.height(Dimens.ButtonHeight),
+    KoverButton(
+        label = text,
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        style = if (primary) KoverButtonStyle.Primary else KoverButtonStyle.Secondary,
+        compact = true,
         focusRequester = focusRequester,
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-    ) { focused ->
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (focused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.align(Alignment.CenterStart),
-        )
-    }
+    )
 }
 
 private fun targetLanguageName(tag: String): String =

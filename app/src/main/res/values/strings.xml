@@ -124,10 +124,10 @@
     <string name="scrapers_client_id">Client ID</string>
     <string name="scrapers_client_secret">Client secret</string>
     <string name="scrapers_bearer">Personal API key (optional, ns_live_…)</string>
-    <string name="scrapers_token">API token</string>
     <string name="scrapers_dev_id">Developer ID</string>
     <string name="scrapers_dev_password">Developer password</string>
     <string name="scrapers_ss_user">User name (optional)</string>
+    <string name="scraper_key_label">API key</string>
     <string name="scrapers_ss_password">User password (optional)</string>
     <string name="scrapers_ss_hint">Credentials are issued on screenscraper.fr (developer account).</string>
     <string name="scrapers_saved">Saved</string>
@@ -135,7 +135,6 @@
     <string name="scraper_howto">How to set up</string>
     <string name="neo_howto">1. Sign in at neoassets.dev.\n2. Open Dashboard → Applications → your API keys.\n3. Create a personal key starting with ns_live_ and paste it below.\nWithout a personal key requests run in guest mode (1 shared thread).</string>
     <string name="neo_open_site">Open the dashboard and create a personal key</string>
-    <string name="neo_key_label">Personal API key (ns_live_…)</string>
     <string name="neo_guest_hint">Guest mode is limited to one thread shared by all apps — a personal key is strongly recommended.</string>
     <string name="sgdb_howto">1. Sign in at steamgriddb.com.\n2. Open Preferences → API.\n3. Copy the API key and paste it below.</string>
     <string name="sgdb_open_site">Open the API key page</string>
@@ -145,6 +144,7 @@
     <string name="scraper_test_ok">Connected</string>
     <string name="scraper_test_error">Failed: %1$s</string>
     <string name="scraper_quota">quota %1$d / %2$d</string>
+    <string name="scraper_quota_unlimited">unlimited</string>
     <string name="scrapers_soon">Soon</string>
     <string name="scrapers_soon_section">Coming soon</string>
     <string name="libretro_desc">Retro box art, screenshots and title screens (no key)</string>
@@ -153,7 +153,6 @@
     <string name="libretro_open_site">Open the thumbnail repositories</string>
     <string name="rawg_howto">1. Sign in at rawg.io.\n2. Open the API docs page and copy your API key.\n3. Paste it below.</string>
     <string name="rawg_open_site">Open the API key page</string>
-    <string name="rawg_key_label">RAWG API key</string>
     <string name="steam_desc">Steam games: descriptions, header art, screenshots (no key)</string>
     <string name="steam_howto">No key required. Data comes from the public Steam Store API.</string>
     <string name="steam_open_site">Open the Steam Store</string>
@@ -194,6 +193,7 @@
     <string name="settings_rom_dir">ROM folder</string>
     <string name="settings_backups">Backups</string>
     <string name="settings_backups_space_hint">Keep original artwork and metadata before changes. Uses disk space.</string>
+    <string name="settings_backups_toggle">Save originals</string>
     <string name="settings_pick_rom_dir">Choose ROM folder</string>
     <string name="settings_section_data">Sources</string>
     <string name="settings_translation">Translation</string>

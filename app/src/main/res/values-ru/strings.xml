@@ -122,10 +122,10 @@
     <string name="scrapers_client_id">Client ID</string>
     <string name="scrapers_client_secret">Client secret</string>
     <string name="scrapers_bearer">Личный API-ключ (необязательно, ns_live_…)</string>
-    <string name="scrapers_token">API-токен</string>
     <string name="scrapers_dev_id">Developer ID</string>
     <string name="scrapers_dev_password">Пароль разработчика</string>
     <string name="scrapers_ss_user">Имя пользователя (необязательно)</string>
+    <string name="scraper_key_label">Ключ API</string>
     <string name="scrapers_ss_password">Пароль пользователя (необязательно)</string>
     <string name="scrapers_ss_hint">Ключи выдаются на screenscraper.fr (аккаунт разработчика).</string>
     <string name="scrapers_saved">Сохранено</string>
@@ -133,7 +133,6 @@
     <string name="scraper_howto">Как настроить</string>
     <string name="neo_howto">1. Войдите на neoassets.dev.\n2. Панель → Приложения → личные API-ключи.\n3. Создайте личный ключ ns_live_… и вставьте его ниже.\nБез личного ключа запросы идут в гостевом режиме (1 общий поток).</string>
     <string name="neo_open_site">Открыть панель и создать личный ключ</string>
-    <string name="neo_key_label">Личный API-ключ (ns_live_…)</string>
     <string name="neo_guest_hint">Гостевой режим — один поток на все приложения, личный ключ настоятельно рекомендуется.</string>
     <string name="sgdb_howto">1. Войдите на steamgriddb.com.\n2. Preferences → API.\n3. Скопируйте API key и вставьте ниже.</string>
     <string name="sgdb_open_site">Открыть страницу API-ключа</string>
@@ -143,6 +142,7 @@
     <string name="scraper_test_ok">Подключено</string>
     <string name="scraper_test_error">Ошибка: %1$s</string>
     <string name="scraper_quota">квота %1$d / %2$d</string>
+    <string name="scraper_quota_unlimited">без лимита</string>
     <string name="scrapers_soon">Скоро</string>
     <string name="scrapers_soon_section">Скоро</string>
     <string name="libretro_desc">Ретро-обложки, скриншоты и титульники (без ключа)</string>
@@ -151,7 +151,6 @@
     <string name="libretro_open_site">Открыть репозитории с картинками</string>
     <string name="rawg_howto">1. Войдите на rawg.io.\n2. Откройте страницу API и скопируйте ключ.\n3. Вставьте его ниже.</string>
     <string name="rawg_open_site">Открыть страницу API-ключа</string>
-    <string name="rawg_key_label">API-ключ RAWG</string>
     <string name="steam_desc">Игры Steam: описания, шапка, скриншоты (без ключа)</string>
     <string name="steam_howto">Ключ не нужен. Данные берутся из публичного Steam Store API.</string>
     <string name="steam_open_site">Открыть Steam Store</string>
@@ -192,6 +191,7 @@
     <string name="settings_rom_dir">Папка ROM</string>
     <string name="settings_backups">Резервные копии</string>
     <string name="settings_backups_space_hint">Сохранять оригинальный арт и метаданные перед изменениями. Занимает место на диске.</string>
+    <string name="settings_backups_toggle">Сохранять оригиналы</string>
     <string name="settings_pick_rom_dir">Выбрать папку ROM</string>
     <string name="settings_section_data">Источники</string>
     <string name="settings_translation">Перевод</string>

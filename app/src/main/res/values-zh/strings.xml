@@ -123,10 +123,10 @@
     <string name="scrapers_client_id">客户端 ID</string>
     <string name="scrapers_client_secret">客户端密钥</string>
     <string name="scrapers_bearer">个人 API 密钥（可选，ns_live_…）</string>
-    <string name="scrapers_token">API 令牌</string>
     <string name="scrapers_dev_id">开发者 ID</string>
     <string name="scrapers_dev_password">开发者密码</string>
     <string name="scrapers_ss_user">用户名（可选）</string>
+    <string name="scraper_key_label">API 密钥</string>
     <string name="scrapers_ss_password">用户密码（可选）</string>
     <string name="scrapers_ss_hint">凭据需在 screenscraper.fr 申请（开发者账号）。</string>
     <string name="scrapers_saved">已保存</string>
@@ -134,7 +134,6 @@
     <string name="scraper_howto">如何设置</string>
     <string name="neo_howto">1. 登录 neoassets.dev。\n2. 打开 面板 → 应用 → 个人 API 密钥。\n3. 创建以 ns_live_ 开头的个人密钥并粘贴到下方。\n没有个人密钥时请求将以访客模式运行（共享 1 个线程）。</string>
     <string name="neo_open_site">打开面板并创建个人密钥</string>
-    <string name="neo_key_label">个人 API 密钥（ns_live_…）</string>
     <string name="neo_guest_hint">访客模式仅有一个共享线程——强烈建议使用个人密钥。</string>
     <string name="sgdb_howto">1. 登录 steamgriddb.com。\n2. 打开 Preferences → API。\n3. 复制 API key 并粘贴到下方。</string>
     <string name="sgdb_open_site">打开 API 密钥页面</string>
@@ -144,6 +143,7 @@
     <string name="scraper_test_ok">已连接</string>
     <string name="scraper_test_error">失败：%1$s</string>
     <string name="scraper_quota">配额 %1$d / %2$d</string>
+    <string name="scraper_quota_unlimited">无限制</string>
     <string name="scrapers_soon">即将推出</string>
     <string name="scrapers_soon_section">即将推出</string>
     <string name="libretro_desc">复古封面、截图和标题画面（无需密钥）</string>
@@ -152,7 +152,6 @@
     <string name="libretro_open_site">打开图片仓库</string>
     <string name="rawg_howto">1. 登录 rawg.io。\n2. 打开 API 文档页面并复制你的 API 密钥。\n3. 粘贴到下方。</string>
     <string name="rawg_open_site">打开 API 密钥页面</string>
-    <string name="rawg_key_label">RAWG API 密钥</string>
     <string name="steam_desc">Steam 游戏：描述、头图、截图（无需密钥）</string>
     <string name="steam_howto">无需密钥。数据来自公开的 Steam Store API。</string>
     <string name="steam_open_site">打开 Steam 商店</string>
@@ -193,6 +192,7 @@
     <string name="settings_rom_dir">ROM 文件夹</string>
     <string name="settings_backups">备份</string>
     <string name="settings_backups_space_hint">更改前保留原始图片和元数据。会占用磁盘空间。</string>
+    <string name="settings_backups_toggle">保存原始文件</string>
     <string name="settings_pick_rom_dir">选择 ROM 文件夹</string>
     <string name="settings_section_data">来源</string>
     <string name="settings_translation">翻译</string>

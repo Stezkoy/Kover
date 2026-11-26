@@ -9,6 +9,9 @@ import com.ark.kover.core.settings.SettingsRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import okhttp3.OkHttpClient
@@ -192,8 +195,9 @@ class NeoAssetsScraper @Inject constructor(
     data class AccountInfo(
         val subject: String?,
         val used: Int,
-        val limit: Int,
-        val remaining: Int,
+        val limit: Int?,
+        val remaining: Int?,
+        val unlimited: Boolean,
     )
 
     /** GET /scrape/account — free, used by the "Check connection" button. */
@@ -207,8 +211,12 @@ class NeoAssetsScraper @Inject constructor(
             .header("X-Client-Id", clientId)
             .header("X-Client-Secret", clientSecret)
             .apply {
-                val key = bearerOverride?.trim().orEmpty().ifBlank { s.neoAssetsBearerKey.trim() }
-                if (key.startsWith("ns_")) header("Authorization", "Bearer $key")
+                // An explicitly blank override means "test as guest"; null falls back to the saved key.
+                val key = bearerOverride?.trim()
+                    ?: s.neoAssetsBearerKey.trim().takeIf { it.startsWith("ns_") }
+                if (!key.isNullOrBlank() && key.startsWith("ns_")) {
+                    header("Authorization", "Bearer $key")
+                }
             }
             .build()
         return try {
@@ -218,10 +226,11 @@ class NeoAssetsScraper @Inject constructor(
                 val root = json.parseToJsonElement(body).jsonObject
                 val quota = root["quota"]?.jsonObject
                 AccountInfo(
-                    subject = root["subject"]?.jsonPrimitive?.content,
-                    used = quota?.get("used")?.jsonPrimitive?.content?.toIntOrNull() ?: 0,
-                    limit = quota?.get("daily_limit")?.jsonPrimitive?.content?.toIntOrNull() ?: 0,
-                    remaining = quota?.get("remaining")?.jsonPrimitive?.content?.toIntOrNull() ?: 0,
+                    subject = root["subject"]?.jsonPrimitive?.contentOrNull,
+                    used = quota?.get("used")?.jsonPrimitive?.intOrNull ?: 0,
+                    limit = quota?.get("daily_limit")?.jsonPrimitive?.intOrNull,
+                    remaining = quota?.get("remaining")?.jsonPrimitive?.intOrNull,
+                    unlimited = quota?.get("unlimited")?.jsonPrimitive?.booleanOrNull ?: false,
                 )
             }
         } catch (e: Exception) {
