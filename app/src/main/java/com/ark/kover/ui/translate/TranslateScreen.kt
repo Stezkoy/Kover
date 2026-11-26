@@ -7,6 +7,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,7 +15,6 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,8 +39,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,9 +64,7 @@ import com.ark.kover.core.translation.looksLikeTargetLanguage
 import com.ark.kover.ui.common.EsDeSlots
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.EmptyState
-import com.ark.kover.ui.components.FocusableCard
 import com.ark.kover.ui.components.KoverTab
-import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.components.rememberInitialFocus
 import com.ark.kover.ui.theme.Dimens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -411,7 +411,7 @@ fun TranslateScreen(
             )
         }
 
-        SectionTitle(stringResource(R.string.translate_platforms))
+        SectionHeader(stringResource(R.string.translate_platforms))
         Row(
             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(Dimens.Gap4),
@@ -430,7 +430,7 @@ fun TranslateScreen(
             }
         }
 
-        SectionTitle(stringResource(R.string.translate_target))
+        SectionHeader(stringResource(R.string.translate_target))
         Row(
             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(Dimens.Gap4),
@@ -448,7 +448,7 @@ fun TranslateScreen(
         when {
             viewModel.selectedSystems.isEmpty() -> Text(
                 text = stringResource(R.string.translate_no_platforms),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
@@ -459,7 +459,7 @@ fun TranslateScreen(
                 CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp)
                 Text(
                     text = stringResource(R.string.translate_reading),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -473,17 +473,17 @@ fun TranslateScreen(
                         same,
                         languageName(viewModel.target),
                     ),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 if (games.isEmpty()) {
                     Text(
                         text = stringResource(R.string.translate_no_roms),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 } else {
-                    SectionTitle(stringResource(R.string.translate_games))
+                    SectionHeader(stringResource(R.string.translate_games))
                     visible.forEach { rom ->
                         GameRow(
                             rom = rom,
@@ -506,7 +506,7 @@ fun TranslateScreen(
                             )
                             Text(
                                 text = stringResource(R.string.translate_page, page + 1, pageCount),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Chip(
@@ -522,90 +522,101 @@ fun TranslateScreen(
         }
 
         if (!backupOn && ready > 0 && !session.isRunning) {
-            Text(
+            WarningBanner(
                 text = stringResource(R.string.translate_backup_off),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.error,
+                error = true,
             )
         }
         if (launcher == "neostation" && !session.isRunning) {
-            Text(
+            WarningBanner(
                 text = stringResource(R.string.translate_neostation),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                error = false,
             )
         }
 
         if (session.isRunning) {
-            LinearProgressIndicator(
-                progress = {
-                    if (session.total > 0) {
-                        session.processed.toFloat() / session.total
-                    } else 0f
-                },
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth(),
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(
-                    text = stringResource(
-                        R.string.translate_running,
-                        session.processed,
-                        session.total,
-                    ),
-                    style = MaterialTheme.typography.labelSmall,
-                )
-                Text(
-                    text = stringResource(
-                        R.string.translate_target_now,
-                        languageName(session.target),
-                    ),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                Column(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.Gap6),
+                ) {
+                    LinearProgressIndicator(
+                        progress = {
+                            if (session.total > 0) {
+                                session.processed.toFloat() / session.total
+                            } else 0f
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = stringResource(
+                                R.string.translate_running,
+                                session.processed,
+                                session.total,
+                            ),
+                            style = MaterialTheme.typography.labelMedium,
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.translate_target_now,
+                                languageName(session.target),
+                            ),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    if (session.currentGame.isNotBlank()) {
+                        Text(
+                            text = stringResource(
+                                R.string.translate_current,
+                                session.currentGame,
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    Text(
+                        text = stringResource(
+                            if (session.isStopping) R.string.translate_stopping
+                            else R.string.translate_continue_hint,
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
-            if (session.currentGame.isNotBlank()) {
-                Text(
-                    text = stringResource(R.string.translate_current, session.currentGame),
-                    style = MaterialTheme.typography.labelSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-            Text(
-                text = stringResource(
-                    if (session.isStopping) R.string.translate_stopping
-                    else R.string.translate_continue_hint,
-                ),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            PrimaryButton(
+            PrimaryAction(
                 label = stringResource(
                     if (session.isStopping) R.string.translate_stopping
                     else R.string.translate_stop,
                 ),
                 enabled = !session.isStopping,
+                destructive = true,
                 onClick = { session.cancel() },
             )
         } else {
             if (session.networkError) {
-                Text(
+                WarningBanner(
                     text = stringResource(R.string.translate_no_internet),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.error,
+                    error = true,
                 )
             }
             if (session.providerError) {
-                Text(
+                WarningBanner(
                     text = stringResource(
                         R.string.translate_provider_stopped,
                         session.failed,
                     ),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.error,
+                    error = true,
                 )
             }
             if (session.finished && (session.processed > 0 || !session.networkError)) {
@@ -625,11 +636,11 @@ fun TranslateScreen(
                             session.failed,
                         )
                     },
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            PrimaryButton(
+            PrimaryAction(
                 label = stringResource(R.string.translate_start),
                 enabled = ready > 0 && !viewModel.isLoading,
                 onClick = { confirm = true },
@@ -666,16 +677,29 @@ fun TranslateScreen(
                 }
             },
             confirmButton = {
-                DialogButton(stringResource(R.string.translate_confirm_start)) {
+                DialogTextButton(
+                    label = stringResource(R.string.translate_confirm_start),
+                    emphasized = true,
+                ) {
                     confirm = false
                     viewModel.start()
                 }
             },
             dismissButton = {
-                DialogButton(stringResource(R.string.common_cancel)) { confirm = false }
+                DialogTextButton(stringResource(R.string.common_cancel)) { confirm = false }
             },
         )
     }
+}
+
+@Composable
+private fun SectionHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelLarge,
+        fontWeight = FontWeight.SemiBold,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
 }
 
 @Composable
@@ -686,13 +710,13 @@ private fun GameRow(
     target: String,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(22.dp),
+        modifier = Modifier.fillMaxWidth().height(26.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Dimens.Gap6),
     ) {
         Text(
             text = rom.name,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.bodySmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
@@ -702,18 +726,55 @@ private fun GameRow(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        StatusPill(status = status, target = target)
+    }
+}
+
+@Composable
+private fun StatusPill(status: TranslateStatus, target: String) {
+    val colors = MaterialTheme.colorScheme
+    val container = when (status) {
+        TranslateStatus.Ready -> colors.primaryContainer
+        TranslateStatus.Same -> colors.surfaceVariant
+        TranslateStatus.Empty -> colors.surfaceVariant.copy(alpha = 0.45f)
+    }
+    val content = when (status) {
+        TranslateStatus.Ready -> colors.onPrimaryContainer
+        else -> colors.onSurfaceVariant
+    }
+    val label = when (status) {
+        TranslateStatus.Ready -> stringResource(R.string.translate_status_ready)
+        TranslateStatus.Empty -> stringResource(R.string.translate_status_empty)
+        TranslateStatus.Same -> stringResource(R.string.translate_status_same, languageName(target))
+    }
+    Surface(
+        color = container,
+        contentColor = content,
+        shape = RoundedCornerShape(50),
+    ) {
         Text(
-            text = when (status) {
-                TranslateStatus.Ready -> stringResource(R.string.translate_status_ready)
-                TranslateStatus.Empty -> stringResource(R.string.translate_status_empty)
-                TranslateStatus.Same -> stringResource(R.string.translate_status_same, languageName(target))
-            },
+            text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = when (status) {
-                TranslateStatus.Ready -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.onSurfaceVariant
-            },
             maxLines = 1,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+        )
+    }
+}
+
+@Composable
+private fun WarningBanner(text: String, error: Boolean) {
+    val colors = MaterialTheme.colorScheme
+    Surface(
+        color = if (error) colors.errorContainer.copy(alpha = 0.60f)
+        else colors.surfaceVariant.copy(alpha = 0.35f),
+        contentColor = if (error) colors.onErrorContainer else colors.onSurfaceVariant,
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
         )
     }
 }
@@ -728,46 +789,41 @@ private fun Chip(
 ) {
     val interaction = remember { MutableInteractionSource() }
     val focused by interaction.collectIsFocusedAsState()
-    val accent = MaterialTheme.colorScheme.primary
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(8.dp)
     Surface(
         color = when {
-            !enabled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
-            selected -> accent.copy(alpha = 0.18f)
-            focused -> accent.copy(alpha = 0.10f)
-            else -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            !enabled -> colors.onSurface.copy(alpha = 0.12f)
+            selected -> colors.primaryContainer
+            else -> colors.surfaceVariant.copy(alpha = 0.55f)
         },
-        shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(
-            width = if (focused && enabled) Dimens.FocusBorder else 1.dp,
-            color = when {
-                focused && enabled -> accent
-                selected -> accent.copy(alpha = 0.5f)
-                else -> MaterialTheme.colorScheme.outlineVariant
-            },
-        ),
+        contentColor = when {
+            !enabled -> colors.onSurface.copy(alpha = 0.38f)
+            selected -> colors.onPrimaryContainer
+            else -> colors.onSurfaceVariant
+        },
+        shape = shape,
+        border = if (focused && enabled) {
+            BorderStroke(Dimens.FocusBorder, colors.primary)
+        } else null,
         modifier = Modifier
-            .height(30.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .height(32.dp)
+            .clip(shape)
             .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
             .clickable(
                 interactionSource = interaction,
-                indication = null,
+                indication = LocalIndication.current,
                 enabled = enabled,
                 onClick = onClick,
             ),
     ) {
         Box(
-            modifier = Modifier.padding(horizontal = 10.dp),
+            modifier = Modifier.padding(horizontal = 12.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = when {
-                    !enabled -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    selected || focused -> accent
-                    else -> MaterialTheme.colorScheme.onSurface
-                },
+                style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
             )
         }
@@ -775,45 +831,87 @@ private fun Chip(
 }
 
 @Composable
-private fun PrimaryButton(
+private fun PrimaryAction(
     label: String,
     enabled: Boolean,
+    destructive: Boolean = false,
     onClick: () -> Unit,
 ) {
-    FocusableCard(
-        onClick = { if (enabled) onClick() },
-        modifier = Modifier.fillMaxWidth().height(38.dp),
-        selected = enabled,
-    ) { focused ->
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelLarge,
-            color = when {
-                !enabled -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                focused -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.onSurface
-            },
-        )
+    val interaction = remember { MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(50)
+    val container = when {
+        !enabled -> colors.onSurface.copy(alpha = 0.12f)
+        destructive -> colors.errorContainer
+        else -> colors.primary
+    }
+    val content = when {
+        !enabled -> colors.onSurface.copy(alpha = 0.38f)
+        destructive -> colors.onErrorContainer
+        else -> colors.onPrimary
+    }
+    val ring = if (destructive) colors.onErrorContainer else colors.onPrimary
+    Surface(
+        color = container,
+        contentColor = content,
+        shape = shape,
+        border = if (focused && enabled) BorderStroke(Dimens.FocusBorder, ring) else null,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(42.dp)
+            .clip(shape)
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                enabled = enabled,
+                onClick = onClick,
+            ),
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
     }
 }
 
 @Composable
-private fun DialogButton(
+private fun DialogTextButton(
     label: String,
-    accent: Boolean = false,
+    emphasized: Boolean = false,
     onClick: () -> Unit,
 ) {
-    FocusableCard(
-        onClick = onClick,
-        modifier = Modifier.height(34.dp),
-        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
-    ) { focused ->
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = if (focused || accent) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurface,
-        )
+    val interaction = remember { MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(8.dp)
+    Surface(
+        color = if (focused) colors.primary.copy(alpha = 0.10f) else Color.Transparent,
+        contentColor = if (emphasized) colors.primary else colors.onSurfaceVariant,
+        shape = shape,
+        border = if (focused) BorderStroke(Dimens.FocusBorder, colors.primary) else null,
+        modifier = Modifier
+            .height(36.dp)
+            .clip(shape)
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                onClick = onClick,
+            ),
+    ) {
+        Box(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Medium,
+            )
+        }
     }
 }
 
