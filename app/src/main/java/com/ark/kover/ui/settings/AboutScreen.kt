@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -40,11 +41,22 @@ fun AboutScreen(
         breadcrumbs = listOf(stringResource(R.string.nav_settings), stringResource(R.string.about_title)),
         onBack = onBack,
     ) {
+        val packageInfo = remember(context) {
+            runCatching {
+                @Suppress("DEPRECATION")
+                val info = context.packageManager.getPackageInfo(context.packageName, 0)
+                info
+            }.getOrNull()
+        }
+        val versionName = packageInfo?.versionName
+            ?.takeIf { it.isNotBlank() }
+            ?: BuildConfig.VERSION_NAME
+        val versionCode = packageInfo?.longVersionCode ?: BuildConfig.VERSION_CODE.toLong()
         Text(
             text = stringResource(
                 R.string.about_build,
-                BuildConfig.VERSION_NAME,
-                BuildConfig.VERSION_CODE,
+                versionName,
+                versionCode,
             ),
             style = MaterialTheme.typography.titleMedium,
         )
