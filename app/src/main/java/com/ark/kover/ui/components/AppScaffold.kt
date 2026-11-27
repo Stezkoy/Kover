@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -94,6 +95,7 @@ private val TranslateIcon: ImageVector = ImageVector.Builder(
 enum class KoverTab(val icon: ImageVector) {
     Library(Icons.Filled.Home),
     Scrapers(Icons.Filled.Search),
+    Generator(Icons.Filled.Star),
     Translate(TranslateIcon),
     Launcher(Icons.Filled.PlayArrow),
     Backups(Icons.Filled.List),
@@ -105,6 +107,7 @@ fun navLabel(tab: KoverTab): String = stringResource(
     when (tab) {
         KoverTab.Library -> R.string.nav_library
         KoverTab.Scrapers -> R.string.nav_scrapers
+        KoverTab.Generator -> R.string.nav_generator
         KoverTab.Translate -> R.string.nav_translate
         KoverTab.Launcher -> R.string.nav_launcher
         KoverTab.Backups -> R.string.nav_backups

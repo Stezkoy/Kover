@@ -25,15 +25,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.ark.kover.BuildConfig
@@ -43,6 +51,7 @@ import com.ark.kover.core.settings.SettingsRepository
 import com.ark.kover.core.update.UpdateRepository
 import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
+import com.ark.kover.ui.components.FieldLabel
 import com.ark.kover.ui.components.FocusableCard
 import com.ark.kover.ui.components.KoverButton
 import com.ark.kover.ui.components.KoverButtonStyle
@@ -121,11 +130,25 @@ fun GeneralSettingsScreen(
 ) {
     val context = LocalContext.current
     val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
-    val manageStorageGranted = Environment.isExternalStorageManager()
+    var manageStorageGranted by remember {
+        mutableStateOf(Environment.isExternalStorageManager())
+    }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                manageStorageGranted = Environment.isExternalStorageManager()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     val storagePermission = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
-    ) { }
+    ) {
+        manageStorageGranted = Environment.isExternalStorageManager()
+    }
 
     val romDirPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocumentTree(),
@@ -151,11 +174,6 @@ fun GeneralSettingsScreen(
         // ---------------- files ----------------
         if (!manageStorageGranted) {
             SectionTitle(text = stringResource(R.string.settings_storage))
-            Text(
-                text = stringResource(R.string.settings_storage_body),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
             FocusableCard(
                 onClick = {
                     val intent = android.content.Intent(
@@ -163,25 +181,32 @@ fun GeneralSettingsScreen(
                     ).apply { data = Uri.parse("package:${context.packageName}") }
                     runCatching { storagePermission.launch(intent) }
                 },
-                modifier = Modifier.fillMaxWidth().height(Dimens.ButtonHeight),
+                modifier = Modifier.fillMaxWidth().height(64.dp),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp, vertical = 6.dp),
             ) { focused ->
-                Text(
-                    text = stringResource(R.string.settings_storage_allow),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = if (focused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                )
+                Column {
+                    Text(
+                        text = stringResource(R.string.settings_storage_allow),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (focused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                    )
+                    Text(
+                        text = stringResource(R.string.settings_storage_body),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
 
-        SectionTitle(text = stringResource(R.string.settings_rom_dir))
-        Text(
-            text = settings.romDirUri
+        FieldLabel(
+            text = stringResource(R.string.settings_rom_dir),
+            value = settings.romDirUri
                 .takeIf { it.isNotBlank() }
                 ?.let { com.ark.kover.core.launcher.EsDePaths.prettyPath(Uri.parse(it)) }
                 ?: stringResource(R.string.launcher_not_set),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 2,
         )
         ActionRow(
             title = stringResource(R.string.settings_pick_rom_dir),
@@ -343,6 +368,7 @@ fun GeneralSettingsScreen(
                 },
             )
         }
+
     }
 }
 

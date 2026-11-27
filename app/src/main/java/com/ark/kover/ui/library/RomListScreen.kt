@@ -39,6 +39,7 @@ import com.ark.kover.core.settings.AppSettings
 import com.ark.kover.core.settings.SettingsRepository
 import com.ark.kover.core.settings.launcherLabel
 import com.ark.kover.core.settings.launcherDirUri
+import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.EmptyState
 import com.ark.kover.ui.components.FocusableCard
@@ -88,6 +89,18 @@ fun RomListScreen(
         onBack = onBack,
         scrollable = false,
     ) {
+        if (settings.launcherDirUri.isBlank()) {
+            EmptyState(
+                title = repo.systemName(system),
+                body = stringResource(R.string.roms_no_launcher, settings.launcherLabel),
+            )
+            ActionRow(
+                title = stringResource(R.string.roms_open_launchers),
+                onClick = { onTabSelected(KoverTab.Launcher) },
+            )
+            return@AppScaffold
+        }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

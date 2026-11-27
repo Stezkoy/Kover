@@ -45,6 +45,18 @@ what you already had and take hours. Kover works the other way around:
 
 Switching between launchers takes one tap; each remembers its own data folder.
 
+### Pack generator
+
+A separate **Generator** section builds image packs from scratch — the active launcher is not used:
+
+- source: **NeoAssets** or **libretro-thumbnails**, with an optional fallback to the other;
+- formats: **1024×1024** icons and **1280×960** miximages;
+- four layouts: **Classic**, **Hero**, **Icon Cover**, **Minimal**;
+- output: `{preset}-{size}/{system}/{ROM}.png` in a folder you choose; existing files are kept unless overwrite is enabled.
+
+ROMs are scanned from the configured ROM folder and artwork is scraped on demand. Layout previews live in
+[docs/miximages](docs/miximages/).
+
 ### Scrapers
 
 | Source | Key | Gives |

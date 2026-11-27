@@ -1,14 +1,17 @@
 package com.ark.kover.scraper
 
+import android.content.Context
 import com.ark.kover.core.model.Asset
 import com.ark.kover.core.model.GameCandidate
 import com.ark.kover.core.model.MatchResult
 import com.ark.kover.core.model.Metadata
 import com.ark.kover.core.scraper.Scraper
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -19,6 +22,7 @@ import javax.inject.Inject
  * then images are served straight from raw.githubusercontent.com.
  */
 class LibretroThumbnailsScraper @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val httpClient: OkHttpClient,
 ) : Scraper {
 
@@ -72,6 +76,15 @@ class LibretroThumbnailsScraper @Inject constructor(
 
     private val cache = mutableMapOf<String, List<Entry>>()
     private val pending = mutableMapOf<String, MatchResult>()
+    private val failedAt = mutableMapOf<String, Long>()
+    private val treeDir: File by lazy { File(context.filesDir, "libretro-trees") }
+
+    private companion object {
+        /** Reuse a downloaded tree for a week instead of hitting the 60/hour GitHub limit. */
+        const val TREE_TTL_MS = 7L * 24 * 60 * 60 * 1000
+        /** Do not retry a rate-limited repository on every game in the same run. */
+        const val FAILURE_COOLDOWN_MS = 10L * 60 * 1000
+    }
 
     override fun isConfigured(): Boolean = true
 
@@ -156,6 +169,21 @@ class LibretroThumbnailsScraper @Inject constructor(
     private fun loadEntries(system: String): List<Entry>? {
         val id = system.lowercase()
         cache[id]?.let { return it }
+
+        val now = System.currentTimeMillis()
+        val failedRecently = now - (failedAt[id] ?: 0L) < FAILURE_COOLDOWN_MS
+        if (!failedRecently) {
+            // The GitHub trees API allows only 60 requests per hour per IP. Keep the
+            // parsed tree on disk so repeated generator runs (and app restarts) do not
+            // burn the quota again.
+            readDiskCache(id, TREE_TTL_MS)?.let {
+                cache[id] = it
+                return it
+            }
+        } else {
+            return readDiskCache(id)?.also { cache[id] = it }
+        }
+
         val repo = repos[id] ?: return null
         val url = "https://api.github.com/repos/libretro-thumbnails/$repo/git/trees/master?recursive=1"
         val request = Request.Builder()
@@ -167,7 +195,8 @@ class LibretroThumbnailsScraper @Inject constructor(
             httpClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     android.util.Log.e("Libretro", "tree HTTP ${response.code} for $repo")
-                    return null
+                    failedAt[id] = System.currentTimeMillis()
+                    return readDiskCache(id)?.also { cache[id] = it }
                 }
                 val body = response.body?.string() ?: return null
                 val tree = json.decodeFromString<TreeResponse>(body)
@@ -183,12 +212,53 @@ class LibretroThumbnailsScraper @Inject constructor(
                     )
                 }
                 cache[id] = entries
+                writeDiskCache(id, entries)
                 android.util.Log.d("Libretro", "$repo: ${entries.size} entries")
                 entries
             }
         } catch (e: Exception) {
             android.util.Log.e("Libretro", "tree failed for $repo", e)
-            null
+            failedAt[id] = System.currentTimeMillis()
+            readDiskCache(id)?.also { cache[id] = it }
+        }
+    }
+
+    private fun readDiskCache(system: String, maxAgeMs: Long? = null): List<Entry>? {
+        return runCatching {
+            val file = File(treeDir, "$system.tsv")
+            if (!file.isFile) return@runCatching null
+            if (maxAgeMs != null && System.currentTimeMillis() - file.lastModified() > maxAgeMs) {
+                return@runCatching null
+            }
+            file.readLines(Charsets.UTF_8).mapNotNull { line ->
+                val parts = line.split('\t')
+                if (parts.size != 3) return@mapNotNull null
+                Entry(category = parts[0], name = parts[1], path = parts[2])
+            }.ifEmpty { null }
+        }.getOrNull()
+    }
+
+    private fun writeDiskCache(system: String, entries: List<Entry>) {
+        runCatching {
+            treeDir.mkdirs()
+            val tmp = File(treeDir, "$system.tmp")
+            tmp.bufferedWriter(Charsets.UTF_8).use { writer ->
+                for (entry in entries) {
+                    writer.write(entry.category)
+                    writer.write("\t")
+                    writer.write(entry.name)
+                    writer.write("\t")
+                    writer.write(entry.path)
+                    writer.write("\n")
+                }
+            }
+            val target = File(treeDir, "$system.tsv")
+            if (!tmp.renameTo(target)) {
+                tmp.copyTo(target, overwrite = true)
+                tmp.delete()
+            }
+        }.onFailure {
+            android.util.Log.w("Libretro", "cannot cache tree for $system", it)
         }
     }
 

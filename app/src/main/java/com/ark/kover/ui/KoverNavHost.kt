@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ark.kover.core.library.LibraryRepository
 import com.ark.kover.ui.game.EditAssetsScreen
+import com.ark.kover.ui.generator.GeneratorScreen
 import com.ark.kover.ui.game.EditMetadataScreen
 import com.ark.kover.ui.game.RomCardScreen
 import com.ark.kover.ui.backup.BackupsScreen
@@ -37,6 +38,7 @@ sealed class Screen(val route: String) {
     object ScraperDetail : Screen("scrapers/{id}") {
         fun create(id: String) = "scrapers/$id"
     }
+    object Generator : Screen("generator")
     object Translate : Screen("translate")
     object Launchers : Screen("launchers")
     object LauncherDetail : Screen("launchers/{id}") {
@@ -62,6 +64,7 @@ fun KoverNavHost() {
         when (tab) {
             com.ark.kover.ui.components.KoverTab.Library -> navController.switchTab(Screen.Library.route)
             com.ark.kover.ui.components.KoverTab.Scrapers -> navController.switchTab(Screen.Scrapers.route)
+            com.ark.kover.ui.components.KoverTab.Generator -> navController.switchTab(Screen.Generator.route)
             com.ark.kover.ui.components.KoverTab.Translate -> navController.switchTab(Screen.Translate.route)
             com.ark.kover.ui.components.KoverTab.Launcher -> navController.switchTab(Screen.Launchers.route)
             com.ark.kover.ui.components.KoverTab.Backups -> navController.switchTab(Screen.Backups.route)
@@ -135,6 +138,12 @@ fun KoverNavHost() {
         composable(Screen.ScraperDetail.route) { entry ->
             ScraperDetailScreen(
                 scraperId = entry.arguments?.getString("id").orEmpty(),
+                onTabSelected = toTab,
+                onBack = back,
+            )
+        }
+        composable(Screen.Generator.route) {
+            GeneratorScreen(
                 onTabSelected = toTab,
                 onBack = back,
             )

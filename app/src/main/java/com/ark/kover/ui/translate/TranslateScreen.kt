@@ -74,7 +74,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.max
@@ -201,7 +200,7 @@ class TranslateViewModel @Inject constructor(
         }
     }
 
-    /** Same launcher switch as the Library screen, including NeoStation folder discovery. */
+    /** Same launcher switch as the Library screen. */
     fun setLauncher(type: String) {
         if (session.isRunning || type == launcherType) return
         session.clearReport()
@@ -215,16 +214,7 @@ class TranslateViewModel @Inject constructor(
         sourceLengths = emptyMap()
         loadedFor = null
         viewModelScope.launch {
-            val neoDir = File(android.os.Environment.getExternalStorageDirectory(), "NeoStation")
-            settingsRepo.update { current ->
-                val dir = when {
-                    type != "neostation" -> current.neostationDirUri
-                    current.neostationDirUri.isNotBlank() -> current.neostationDirUri
-                    neoDir.isDirectory -> "file://${neoDir.absolutePath}"
-                    else -> ""
-                }
-                current.copy(launcherType = type, neostationDirUri = dir)
-            }
+            settingsRepo.update { it.copy(launcherType = type) }
             repo.clearCovers()
         }
     }
@@ -377,14 +367,6 @@ fun TranslateScreen(
             )
             return@AppScaffold
         }
-        if (launcherDir.isBlank()) {
-            EmptyState(
-                title = stringResource(R.string.translate_title),
-                body = stringResource(R.string.translate_launcher_hint),
-            )
-            return@AppScaffold
-        }
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -409,6 +391,14 @@ fun TranslateScreen(
                 enabled = !session.isRunning,
                 onClick = { viewModel.setLauncher("custom") },
             )
+        }
+
+        if (launcherDir.isBlank()) {
+            EmptyState(
+                title = stringResource(R.string.translate_title),
+                body = stringResource(R.string.translate_launcher_hint, settings.launcherLabel),
+            )
+            return@AppScaffold
         }
 
         SectionHeader(stringResource(R.string.translate_platforms))

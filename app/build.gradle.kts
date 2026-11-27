@@ -122,6 +122,7 @@ implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // WorkManager (background tasks)
     implementation("androidx.work:work-runtime-ktx:2.9.0")
+implementation("androidx.documentfile:documentfile:1.0.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")

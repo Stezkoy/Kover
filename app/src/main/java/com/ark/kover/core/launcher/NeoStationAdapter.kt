@@ -56,8 +56,8 @@ class NeoStationAdapter(
         // NeoStation keeps installed Android games as packages in its database,
         // they have no ROM file in the scanned tree.
         val s = settings.settings.first()
-        val dirUri = s.neostationDirUri.ifBlank { s.esdeDirUri }
-        val launcherDir = runCatching { root(Uri.parse(dirUri)) }.getOrNull()
+        val dirUri = s.neostationDirUri
+        val launcherDir = if (dirUri.isBlank()) null else runCatching { root(Uri.parse(dirUri)) }.getOrNull()
         if (launcherDir != null) {
             val apps = androidApps(launcherDir)
             if (apps.isNotEmpty()) result[ANDROID_SYSTEM] = apps

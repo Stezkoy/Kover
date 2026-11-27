@@ -24,6 +24,7 @@
     <string name="nav_launcher">Лаунчеры</string>
     <string name="nav_backups">Бэкапы</string>
     <string name="nav_settings">Настройки</string>
+    <string name="nav_generator">Генератор</string>
 
     <!-- Library -->
     <string name="library_systems">Платформы</string>
@@ -35,10 +36,13 @@
     <string name="library_scanning">Сканирование…</string>
     <string name="library_no_folder_body">Откройте Настройки → Папка ROM и выберите каталог библиотеки.</string>
     <string name="library_open_settings">Открыть настройки</string>
+    <string name="library_open_launchers">Открыть лаунчеры</string>
     <string name="library_rescan">Пересканировать</string>
 
     <!-- ROM list -->
     <string name="roms_empty">Для этой платформы ROM не найдены.</string>
+    <string name="roms_no_launcher">Сначала укажите папку данных для %1$s в разделе «Лаунчеры».</string>
+    <string name="roms_open_launchers">Открыть лаунчеры</string>
 
     <!-- ROM card -->
     <string name="rom_metadata">Метаданные</string>
@@ -168,11 +172,13 @@
     <string name="launcher_pick_data_dir">Выбрать папку данных</string>
     <string name="launcher_pick_dir">Выбрать папку ES-DE</string>
     <string name="launcher_not_set">не выбрана</string>
+    <string name="launcher_clear_dir">Очистить путь к папке</string>
+    <string name="launcher_clear_dir_confirm">Забыть выбранную папку? Файлы на диске не удаляются.</string>
+    <string name="launcher_clear_dir_action">Очистить</string>
     <string name="launcher_other">Другой</string>
     <string name="launcher_other_hint">Для других лаунчеров позже</string>
     <string name="neostation_subtitle">Библиотека в SQLite: метаданные и арт</string>
     <string name="neostation_hint">NeoStation хранит data.sqlite и медиа в папке NeoStation. Закройте NeoStation перед сохранением, чтобы он перечитал базу.</string>
-    <string name="neostation_autodetect">Найти папку автоматически</string>
     <string name="neostation_no_folder">Папка NeoStation не выбрана. Откройте «Лаунчеры» → NeoStation и укажите папку NeoStation.</string>
     <string name="custom_subtitle">Своя папка: gamelists + media, все 11 слотов</string>
     <string name="custom_hint">Kover создаёт gamelists/{system}/gamelist.xml и media/{system}/{slot}/ в выбранной папке.</string>
@@ -191,8 +197,8 @@
     <string name="settings_appearance">Оформление</string>
     <string name="settings_theme_system">Тема и акцентный цвет берутся из системы</string>
     <string name="settings_language_system">Язык берётся из системы</string>
-    <string name="settings_storage">Доступ к файлам</string>
-    <string name="settings_storage_body">Полный доступ к файлам нужен, чтобы сканировать ROM и писать артворк в папку лаунчера.</string>
+    <string name="settings_storage">Доступ ко всем файлам</string>
+    <string name="settings_storage_body">Нужен для чтения ROM и прямой записи в папки ES-DE, NeoStation и Custom. Без него эти функции не получат доступ к файлам.</string>
     <string name="settings_storage_allow">Разрешить доступ</string>
     <string name="settings_rom_dir">Папка ROM</string>
     <string name="settings_backups">Резервные копии</string>
@@ -261,7 +267,8 @@
     <string name="backups_prev">‹ Назад</string>
     <string name="backups_next">Далее ›</string>
     <string name="backups_page">%1$d / %2$d</string>
-    <string name="backups_no_launcher">Сначала выберите папку ES-DE.</string>
+    <string name="backups_no_launcher">Сначала выберите папку данных для %1$s.</string>
+    <string name="backups_open_launchers">Открыть лаунчеры</string>
     <string name="library_section_apps">Приложения и эмуляторы</string>
     <string name="library_section_android_games">Android игры</string>
     <string name="rom_view_grid">Плитка</string>
@@ -336,9 +343,52 @@
     <string name="translate_confirm_start">Начать</string>
     <string name="translate_continue_hint">Перевод продолжится, даже если вы уйдёте с экрана.</string>
     <string name="translate_settings_hint">Укажите папку ROM в настройках.</string>
-    <string name="translate_launcher_hint">Укажите папку данных лаунчера в настройках.</string>
+    <string name="translate_launcher_hint">Сначала выберите папку данных для %1$s в настройках.</string>
     <string name="translate_no_internet">Нет подключения к интернету. Подключите сеть и повторите.</string>
     <string name="translate_provider_stopped">Сервис перевода не отвечает. Остановлено после %1$d ошибок.</string>
+
+    <!-- Generator -->
+    <string name="generator_rom_folder">Папка ROM</string>
+    <string name="generator_not_set">не выбрана</string>
+    <string name="generator_change">Изменить</string>
+    <string name="generator_no_folder">Сначала выберите папку ROM в Настройках.</string>
+    <string name="generator_scanning">Сканирование…</string>
+    <string name="generator_scan_failed">Не удалось прочитать папку ROM.</string>
+    <string name="generator_source">Источник</string>
+    <string name="generator_fallback_libretro">Добирать из libretro?</string>
+    <string name="generator_fallback_neoassets_desc">Если у libretro нет части арта. Расходует квоту NeoAssets.</string>
+    <string name="generator_fallback_libretro_desc">Если у NeoAssets нет части арта.</string>
+    <string name="generator_fallback_neoassets">Добирать из NeoAssets?</string>
+    <string name="generator_formats">Форматы</string>
+    <string name="generator_presets">Пресеты</string>
+    <string name="generator_preset_classic">P1 · Классика</string>
+    <string name="generator_preset_classic_desc">Скриншот, лого, обложка</string>
+    <string name="generator_preset_hero">P2 · Герой</string>
+    <string name="generator_preset_hero_desc">Фанарт, скриншот, лого, обложка</string>
+    <string name="generator_preset_icon">P3 · Иконка-обложка</string>
+    <string name="generator_preset_icon_desc">Обложка и лого</string>
+    <string name="generator_preset_minimal">P4 · Минимал</string>
+    <string name="generator_preset_minimal_desc">Скриншот и лого</string>
+    <string name="generator_platforms">Платформы</string>
+    <string name="generator_select_all">Все</string>
+    <string name="generator_no_platforms">Нет поддерживаемых платформ для этого источника.</string>
+    <string name="generator_output">Куда сохранить</string>
+    <string name="generator_overwrite">Перезаписывать файлы?</string>
+    <string name="generator_overwrite_desc">Если выключено, существующие файлы пропускаются.</string>
+    <string name="generator_estimate">Игр: %1$d · файлов: %2$d · запросов: %3$d</string>
+    <string name="generator_start">Сгенерировать</string>
+    <string name="generator_stop">Остановить</string>
+    <string name="generator_preparing">Подготовка…</string>
+    <string name="generator_guest_mode">Гостевой режим NeoAssets: около 30 запросов в минуту.</string>
+    <string name="generator_report">Отчёт</string>
+    <string name="generator_report_line">Файлов: %1$d · игр: %2$d · уже было: %3$d · без совпадений: %4$d · ошибок: %5$d</string>
+    <string name="generator_report_text_logo">С текстовым лого: %1$d</string>
+    <string name="generator_cancelled">Остановлено</string>
+    <string name="generator_error_network">Нет подключения к интернету.</string>
+    <string name="generator_error_quota">Квота NeoAssets исчерпана.</string>
+    <string name="generator_error_output">Папка для пака недоступна.</string>
+    <string name="generator_error_no_roms">Не выбрано ни одной игры.</string>
     <string name="meta_translate_failed">Не удалось перевести. Попробуйте позже.</string>
     <string name="meta_translate_same">Текст уже на целевом языке.</string>
+
 </resources>

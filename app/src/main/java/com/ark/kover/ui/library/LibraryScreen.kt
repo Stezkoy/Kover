@@ -73,19 +73,7 @@ class LibraryViewModel @Inject constructor(
     /** Switches the launcher scope and drops cached covers (they differ per launcher). */
     fun setLauncher(type: String) {
         viewModelScope.launch {
-            val neoDir = java.io.File(
-                android.os.Environment.getExternalStorageDirectory(),
-                "NeoStation",
-            )
-            settingsRepo.update { current ->
-                val dir = when {
-                    type != "neostation" -> current.neostationDirUri
-                    current.neostationDirUri.isNotBlank() -> current.neostationDirUri
-                    neoDir.isDirectory -> "file://${neoDir.absolutePath}"
-                    else -> ""
-                }
-                current.copy(launcherType = type, neostationDirUri = dir)
-            }
+            settingsRepo.update { it.copy(launcherType = type) }
             repo.clearCovers()
         }
     }
@@ -101,11 +89,12 @@ fun LibraryScreen(
     val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
     val repo = viewModel.repo
     val romDirUri = settings.romDirUri
+    val launcherDirUri = settings.launcherDirUri
     val firstFocus = rememberInitialFocus()
     val launcher = settings.launcherType
     val extraSystemIds = EsDeSlots.extrasFor(launcher)
 
-    LaunchedEffect(romDirUri, launcher) {
+    LaunchedEffect(romDirUri, launcher, launcherDirUri) {
         if (romDirUri.isNotBlank()) {
             // The library differs per launcher (NeoStation adds Android games), so
             // start from a clean state and restore that launcher's own cache.
@@ -171,8 +160,8 @@ fun LibraryScreen(
                     body = stringResource(R.string.neostation_no_folder),
                     action = {
                         ActionRow(
-                            title = stringResource(R.string.common_scan),
-                            onClick = { viewModel.setLauncher("neostation") },
+                            title = stringResource(R.string.library_open_launchers),
+                            onClick = { onTabSelected(KoverTab.Launcher) },
                         )
                     },
                 )
@@ -184,7 +173,7 @@ fun LibraryScreen(
                     body = stringResource(R.string.custom_no_folder),
                     action = {
                         ActionRow(
-                            title = stringResource(R.string.nav_launcher),
+                            title = stringResource(R.string.library_open_launchers),
                             onClick = { onTabSelected(KoverTab.Launcher) },
                         )
                     },

@@ -43,6 +43,7 @@ data class AppSettings(
     val lastUpdateCheckAt: Long = 0L,
     // Active scrapers (comma-separated ids); disabled scrapers are hidden in the editors
     val activeScrapers: String = "neoassets,steamgriddb,libretro,steam",
+    val generatorOutputUri: String = "",
 )
 
 /** True when the scraper is enabled in settings. */
@@ -96,6 +97,7 @@ class SettingsRepository @Inject constructor(
             updateCheckEnabled = prefs[KEY_UPDATE_CHECK] ?: true,
             lastUpdateCheckAt = prefs[KEY_LAST_UPDATE_CHECK] ?: 0L,
             activeScrapers = prefs[KEY_ACTIVE_SCRAPERS] ?: "neoassets,steamgriddb,libretro,steam",
+            generatorOutputUri = prefs[KEY_GENERATOR_OUTPUT] ?: "",
         )
     }
 
@@ -123,6 +125,7 @@ class SettingsRepository @Inject constructor(
                 updateCheckEnabled = prefs[KEY_UPDATE_CHECK] ?: true,
                 lastUpdateCheckAt = prefs[KEY_LAST_UPDATE_CHECK] ?: 0L,
                 activeScrapers = prefs[KEY_ACTIVE_SCRAPERS] ?: "neoassets,steamgriddb,libretro,steam",
+                generatorOutputUri = prefs[KEY_GENERATOR_OUTPUT] ?: "",
             )
             val updated = transform(current)
             prefs[KEY_ROM_DIR] = updated.romDirUri
@@ -145,6 +148,7 @@ class SettingsRepository @Inject constructor(
             prefs[KEY_UPDATE_CHECK] = updated.updateCheckEnabled
             prefs[KEY_LAST_UPDATE_CHECK] = updated.lastUpdateCheckAt
             prefs[KEY_ACTIVE_SCRAPERS] = updated.activeScrapers
+            prefs[KEY_GENERATOR_OUTPUT] = updated.generatorOutputUri
         }
     }
 
@@ -169,5 +173,6 @@ class SettingsRepository @Inject constructor(
         private val KEY_UPDATE_CHECK = androidx.datastore.preferences.core.booleanPreferencesKey("update_check_enabled")
         private val KEY_LAST_UPDATE_CHECK = androidx.datastore.preferences.core.longPreferencesKey("last_update_check")
         private val KEY_ACTIVE_SCRAPERS = stringPreferencesKey("active_scrapers")
+        private val KEY_GENERATOR_OUTPUT = stringPreferencesKey("generator_output_uri")
     }
 }

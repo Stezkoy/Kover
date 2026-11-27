@@ -26,6 +26,7 @@
     <string name="nav_launcher">Launchers</string>
     <string name="nav_backups">Backups</string>
     <string name="nav_settings">Settings</string>
+    <string name="nav_generator">Generator</string>
 
     <!-- Library -->
     <string name="library_systems">Platforms</string>
@@ -37,10 +38,13 @@
     <string name="library_scanning">Scanning…</string>
     <string name="library_no_folder_body">Open Settings → ROM folder and choose your library folder.</string>
     <string name="library_open_settings">Open settings</string>
+    <string name="library_open_launchers">Open launchers</string>
     <string name="library_rescan">Rescan library</string>
 
     <!-- ROM list -->
     <string name="roms_empty">No ROMs found for this platform.</string>
+    <string name="roms_no_launcher">Set the %1$s data folder in Launchers first.</string>
+    <string name="roms_open_launchers">Open launchers</string>
 
     <!-- ROM card -->
     <string name="rom_metadata">Metadata</string>
@@ -170,11 +174,13 @@
     <string name="launcher_pick_data_dir">Choose data folder</string>
     <string name="launcher_pick_dir">Choose ES-DE folder</string>
     <string name="launcher_not_set">not set</string>
+    <string name="launcher_clear_dir">Clear folder path</string>
+    <string name="launcher_clear_dir_confirm">Forget the selected folder? Files on disk will not be deleted.</string>
+    <string name="launcher_clear_dir_action">Clear</string>
     <string name="launcher_other">Other</string>
     <string name="launcher_other_hint">For other launchers later</string>
     <string name="neostation_subtitle">SQLite library: metadata and artwork</string>
     <string name="neostation_hint">NeoStation keeps data.sqlite and media in the NeoStation folder. Close NeoStation before saving so it reloads the database.</string>
-    <string name="neostation_autodetect">Find the folder automatically</string>
     <string name="neostation_no_folder">NeoStation folder is not set. Open Launchers - NeoStation and pick the NeoStation folder.</string>
     <string name="custom_subtitle">Your own folder: gamelists + media, all 11 slots</string>
     <string name="custom_hint">Kover creates gamelists/{system}/gamelist.xml and media/{system}/{slot}/ inside the folder you choose.</string>
@@ -193,9 +199,9 @@
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme_system">Follows the system theme and accent color</string>
     <string name="settings_language_system">Follows the system language</string>
-    <string name="settings_storage">File access</string>
-    <string name="settings_storage_body">All-files access is needed to scan ROMs and write artwork into the launcher folder.</string>
-    <string name="settings_storage_allow">Allow file access</string>
+    <string name="settings_storage">All files access</string>
+    <string name="settings_storage_body">Needed to read ROMs and write directly into ES-DE, NeoStation and Custom folders. Without it those features cannot access files.</string>
+    <string name="settings_storage_allow">Allow access</string>
     <string name="settings_rom_dir">ROM folder</string>
     <string name="settings_backups">Backups</string>
     <string name="settings_backups_space_hint">Keep original artwork and metadata before changes. Uses disk space.</string>
@@ -263,7 +269,8 @@
     <string name="backups_prev">‹ Prev</string>
     <string name="backups_next">Next ›</string>
     <string name="backups_page">%1$d / %2$d</string>
-    <string name="backups_no_launcher">Set the ES-DE folder first.</string>
+    <string name="backups_no_launcher">Set the %1$s data folder first.</string>
+    <string name="backups_open_launchers">Open launchers</string>
     <string name="library_section_apps">Apps &amp; emulators</string>
     <string name="library_section_android_games">Android Games</string>
     <string name="rom_view_grid">Grid</string>
@@ -338,9 +345,52 @@
     <string name="translate_confirm_start">Start</string>
     <string name="translate_continue_hint">Translation continues even if you leave this screen.</string>
     <string name="translate_settings_hint">Set the ROM folder in Settings.</string>
-    <string name="translate_launcher_hint">Set the launcher data folder in Settings.</string>
+    <string name="translate_launcher_hint">Set the %1$s data folder in Settings first.</string>
     <string name="translate_no_internet">No internet connection. Connect to the network and try again.</string>
     <string name="translate_provider_stopped">Translation service is not responding. Stopped after %1$d errors.</string>
+
+    <!-- Generator -->
+    <string name="generator_rom_folder">ROM folder</string>
+    <string name="generator_not_set">not set</string>
+    <string name="generator_change">Change</string>
+    <string name="generator_no_folder">Choose a ROM folder in Settings first.</string>
+    <string name="generator_scanning">Scanning…</string>
+    <string name="generator_scan_failed">Could not read the ROM folder.</string>
+    <string name="generator_source">Source</string>
+    <string name="generator_fallback_libretro">Fill from libretro?</string>
+    <string name="generator_fallback_neoassets_desc">If libretro lacks some artwork. Uses NeoAssets quota.</string>
+    <string name="generator_fallback_libretro_desc">If NeoAssets lacks some artwork.</string>
+    <string name="generator_fallback_neoassets">Fill from NeoAssets?</string>
+    <string name="generator_formats">Formats</string>
+    <string name="generator_presets">Presets</string>
+    <string name="generator_preset_classic">P1 · Classic</string>
+    <string name="generator_preset_classic_desc">Screenshot, logo, cover</string>
+    <string name="generator_preset_hero">P2 · Hero</string>
+    <string name="generator_preset_hero_desc">Fanart, screenshot, logo, cover</string>
+    <string name="generator_preset_icon">P3 · Icon Cover</string>
+    <string name="generator_preset_icon_desc">Cover and logo</string>
+    <string name="generator_preset_minimal">P4 · Minimal</string>
+    <string name="generator_preset_minimal_desc">Blurred screenshot and logo</string>
+    <string name="generator_platforms">Platforms</string>
+    <string name="generator_select_all">All</string>
+    <string name="generator_no_platforms">No supported platforms for this source.</string>
+    <string name="generator_output">Save to</string>
+    <string name="generator_overwrite">Overwrite files?</string>
+    <string name="generator_overwrite_desc">When off, existing files are skipped.</string>
+    <string name="generator_estimate">%1$d games · %2$d files · %3$d requests</string>
+    <string name="generator_start">Generate</string>
+    <string name="generator_stop">Stop</string>
+    <string name="generator_preparing">Preparing…</string>
+    <string name="generator_guest_mode">Guest mode: about 30 NeoAssets requests per minute.</string>
+    <string name="generator_report">Report</string>
+    <string name="generator_report_line">%1$d files · %2$d games · %3$d already there · %4$d no match · %5$d errors</string>
+    <string name="generator_report_text_logo">Text logo used: %1$d</string>
+    <string name="generator_cancelled">Stopped</string>
+    <string name="generator_error_network">No internet connection.</string>
+    <string name="generator_error_quota">NeoAssets quota is exhausted.</string>
+    <string name="generator_error_output">The output folder is not accessible.</string>
+    <string name="generator_error_no_roms">No games selected.</string>
     <string name="meta_translate_failed">Translation failed. Try again later.</string>
     <string name="meta_translate_same">The text is already in the target language.</string>
+
 </resources>

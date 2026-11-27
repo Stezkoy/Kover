@@ -4,10 +4,15 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,9 +50,8 @@ class LauncherDetailViewModel @Inject constructor(
         }
     }
 
-    fun autoDetectNeoStation() {
-        val dir = java.io.File(android.os.Environment.getExternalStorageDirectory(), "NeoStation")
-        if (dir.isDirectory) saveDir("neostation", "file://${dir.absolutePath}")
+    fun clearDir(launcherId: String) {
+        saveDir(launcherId, "")
     }
 }
 
@@ -65,6 +69,7 @@ fun LauncherDetailScreen(
         "custom" -> settings.customDirUri
         else -> settings.esdeDirUri
     }
+    var confirmClear by remember { mutableStateOf(false) }
 
     val esdeDirPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocumentTree(),
@@ -147,16 +152,17 @@ fun LauncherDetailScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 3,
         )
+        if (currentDir.isNotBlank()) {
+            ActionRow(
+                title = stringResource(R.string.launcher_clear_dir),
+                onClick = { confirmClear = true },
+            )
+        }
         if (launcherId == "neostation") {
             Text(
                 text = stringResource(R.string.neostation_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            ActionRow(
-                title = stringResource(R.string.neostation_autodetect),
-                subtitle = "/storage/emulated/0/NeoStation",
-                onClick = { viewModel.autoDetectNeoStation() },
             )
         }
         ActionRow(
@@ -169,5 +175,27 @@ fun LauncherDetailScreen(
             ),
             onClick = { esdeDirPicker.launch(null) },
         )
+        if (confirmClear) {
+            AlertDialog(
+                onDismissRequest = { confirmClear = false },
+                title = { Text(stringResource(R.string.launcher_clear_dir)) },
+                text = { Text(stringResource(R.string.launcher_clear_dir_confirm)) },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.clearDir(launcherId)
+                            confirmClear = false
+                        },
+                    ) {
+                        Text(stringResource(R.string.launcher_clear_dir_action))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { confirmClear = false }) {
+                        Text(stringResource(R.string.common_cancel))
+                    }
+                },
+            )
+        }
     }
 }

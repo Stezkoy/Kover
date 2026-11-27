@@ -38,11 +38,13 @@ import com.ark.kover.core.backup.MetadataField
 import com.ark.kover.core.settings.AppSettings
 import com.ark.kover.core.settings.SettingsRepository
 import com.ark.kover.core.settings.launcherDirUri
+import com.ark.kover.core.settings.launcherLabel
 import com.ark.kover.ui.common.slotLabel
 import com.ark.kover.ui.components.ActionRow
 import com.ark.kover.ui.components.AppScaffold
 import com.ark.kover.ui.components.EmptyState
 import com.ark.kover.ui.components.FocusableCard
+import com.ark.kover.ui.components.KoverChip
 import com.ark.kover.ui.components.KoverTab
 import com.ark.kover.ui.components.SectionTitle
 import com.ark.kover.ui.components.Thumb
@@ -72,6 +74,14 @@ class BackupsViewModel @Inject constructor(
         private set
     var currentMetadata by mutableStateOf<com.ark.kover.core.model.Metadata?>(null)
         private set
+
+    fun setLauncher(type: String) {
+        viewModelScope.launch {
+            settingsRepo.update { it.copy(launcherType = type) }
+            entries = emptyList()
+            message = ""
+        }
+    }
 
     fun load(resolver: ContentResolver, dirUri: Uri?) {
         if (dirUri == null) return
@@ -128,6 +138,7 @@ fun BackupsScreen(
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
+    val launcher = settings.launcherType
     val dirUri = settings.launcherDirUri.takeIf { it.isNotBlank() }?.let { Uri.parse(it) }
     var restoreAsset by androidx.compose.runtime.remember {
         mutableStateOf<BackupEntry?>(null)
@@ -143,13 +154,38 @@ fun BackupsScreen(
     AppScaffold(
         selectedTab = KoverTab.Backups,
         onTabSelected = onTabSelected,
-        breadcrumbs = listOf(stringResource(R.string.backups_title)),
+        breadcrumbs = listOf(settings.launcherLabel, stringResource(R.string.backups_title)),
         onBack = onBack,
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Gap4),
+        ) {
+            KoverChip(
+                label = "ES-DE",
+                selected = launcher == "es-de",
+                onClick = { viewModel.setLauncher("es-de") },
+            )
+            KoverChip(
+                label = "NeoStation",
+                selected = launcher == "neostation",
+                onClick = { viewModel.setLauncher("neostation") },
+            )
+            KoverChip(
+                label = "Custom",
+                selected = launcher == "custom",
+                onClick = { viewModel.setLauncher("custom") },
+            )
+        }
+
         if (dirUri == null) {
             EmptyState(
                 title = stringResource(R.string.backups_title),
-                body = stringResource(R.string.backups_no_launcher),
+                body = stringResource(R.string.backups_no_launcher, settings.launcherLabel),
+            )
+            ActionRow(
+                title = stringResource(R.string.backups_open_launchers),
+                onClick = { onTabSelected(KoverTab.Launcher) },
             )
             return@AppScaffold
         }

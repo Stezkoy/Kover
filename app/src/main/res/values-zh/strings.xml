@@ -25,6 +25,7 @@
     <string name="nav_launcher">启动器</string>
     <string name="nav_backups">备份</string>
     <string name="nav_settings">设置</string>
+    <string name="nav_generator">生成器</string>
 
     <!-- Library -->
     <string name="library_systems">平台</string>
@@ -36,10 +37,13 @@
     <string name="library_scanning">扫描中…</string>
     <string name="library_no_folder_body">打开“设置 → ROM 文件夹”并选择游戏库目录。</string>
     <string name="library_open_settings">打开设置</string>
+    <string name="library_open_launchers">打开启动器</string>
     <string name="library_rescan">重新扫描</string>
 
     <!-- ROM list -->
     <string name="roms_empty">该平台未找到 ROM。</string>
+    <string name="roms_no_launcher">请先在启动器中为 %1$s 设置数据文件夹。</string>
+    <string name="roms_open_launchers">打开启动器</string>
 
     <!-- ROM card -->
     <string name="rom_metadata">元数据</string>
@@ -169,11 +173,13 @@
     <string name="launcher_pick_data_dir">选择数据文件夹</string>
     <string name="launcher_pick_dir">选择 ES-DE 文件夹</string>
     <string name="launcher_not_set">未设置</string>
+    <string name="launcher_clear_dir">清除文件夹路径</string>
+    <string name="launcher_clear_dir_confirm">忘记所选文件夹？磁盘上的文件不会被删除。</string>
+    <string name="launcher_clear_dir_action">清除</string>
     <string name="launcher_other">其他</string>
     <string name="launcher_other_hint">以后支持其他启动器</string>
     <string name="neostation_subtitle">SQLite 游戏库：元数据和图片</string>
     <string name="neostation_hint">NeoStation 将 data.sqlite 和媒体保存在 NeoStation 文件夹。保存前请关闭 NeoStation，以便它重新读取数据库。</string>
-    <string name="neostation_autodetect">自动查找文件夹</string>
     <string name="neostation_no_folder">未设置 NeoStation 文件夹。请打开“启动器”→“NeoStation”并选择 NeoStation 文件夹。</string>
     <string name="custom_subtitle">自定义文件夹：gamelists + media，全部 11 个槽位</string>
     <string name="custom_hint">Kover 会在所选文件夹中创建 gamelists/{system}/gamelist.xml 和 media/{system}/{slot}/。</string>
@@ -192,9 +198,9 @@
     <string name="settings_appearance">外观</string>
     <string name="settings_theme_system">跟随系统主题和强调色</string>
     <string name="settings_language_system">跟随系统语言</string>
-    <string name="settings_storage">文件访问</string>
-    <string name="settings_storage_body">扫描 ROM 和写入图片需要所有文件访问权限。</string>
-    <string name="settings_storage_allow">允许访问文件</string>
+    <string name="settings_storage">所有文件访问</string>
+    <string name="settings_storage_body">用于读取 ROM 并直接写入 ES-DE、NeoStation 和 Custom 文件夹；没有此权限这些功能将无法访问文件。</string>
+    <string name="settings_storage_allow">允许访问</string>
     <string name="settings_rom_dir">ROM 文件夹</string>
     <string name="settings_backups">备份</string>
     <string name="settings_backups_space_hint">更改前保留原始图片和元数据。会占用磁盘空间。</string>
@@ -262,7 +268,8 @@
     <string name="backups_prev">‹ 上一页</string>
     <string name="backups_next">下一页 ›</string>
     <string name="backups_page">%1$d / %2$d</string>
-    <string name="backups_no_launcher">请先选择 ES-DE 文件夹。</string>
+    <string name="backups_no_launcher">请先为 %1$s 选择数据文件夹。</string>
+    <string name="backups_open_launchers">打开启动器</string>
     <string name="library_section_apps">应用与模拟器</string>
     <string name="library_section_android_games">Android 游戏</string>
     <string name="rom_view_grid">网格</string>
@@ -337,9 +344,52 @@
     <string name="translate_confirm_start">开始</string>
     <string name="translate_continue_hint">离开此屏幕后翻译仍会继续。</string>
     <string name="translate_settings_hint">请在设置中指定 ROM 文件夹。</string>
-    <string name="translate_launcher_hint">请在设置中指定启动器数据文件夹。</string>
+    <string name="translate_launcher_hint">请先在设置中为 %1$s 选择数据文件夹。</string>
     <string name="translate_no_internet">没有网络连接。请连接网络后重试。</string>
     <string name="translate_provider_stopped">翻译服务无响应。在 %1$d 个错误后停止。</string>
+
+    <!-- Generator -->
+    <string name="generator_rom_folder">ROM 文件夹</string>
+    <string name="generator_not_set">未选择</string>
+    <string name="generator_change">更改</string>
+    <string name="generator_no_folder">请先在设置中选择 ROM 文件夹。</string>
+    <string name="generator_scanning">扫描中…</string>
+    <string name="generator_scan_failed">无法读取 ROM 文件夹。</string>
+    <string name="generator_source">来源</string>
+    <string name="generator_fallback_libretro">从 libretro 补齐？</string>
+    <string name="generator_fallback_neoassets_desc">如果 libretro 缺少部分图片。会消耗 NeoAssets 配额。</string>
+    <string name="generator_fallback_libretro_desc">如果 NeoAssets 缺少部分图片。</string>
+    <string name="generator_fallback_neoassets">从 NeoAssets 补齐？</string>
+    <string name="generator_formats">格式</string>
+    <string name="generator_presets">预设</string>
+    <string name="generator_preset_classic">P1 · 经典</string>
+    <string name="generator_preset_classic_desc">截图、标志、封面</string>
+    <string name="generator_preset_hero">P2 · 主视觉</string>
+    <string name="generator_preset_hero_desc">背景图、截图、标志、封面</string>
+    <string name="generator_preset_icon">P3 · 封面图标</string>
+    <string name="generator_preset_icon_desc">封面和标志</string>
+    <string name="generator_preset_minimal">P4 · 极简</string>
+    <string name="generator_preset_minimal_desc">模糊截图和标志</string>
+    <string name="generator_platforms">平台</string>
+    <string name="generator_select_all">全选</string>
+    <string name="generator_no_platforms">此来源没有支持的平台。</string>
+    <string name="generator_output">保存到</string>
+    <string name="generator_overwrite">覆盖文件？</string>
+    <string name="generator_overwrite_desc">关闭时，会跳过现有文件。</string>
+    <string name="generator_estimate">%1$d 个游戏 · %2$d 个文件 · %3$d 次请求</string>
+    <string name="generator_start">生成</string>
+    <string name="generator_stop">停止</string>
+    <string name="generator_preparing">准备中…</string>
+    <string name="generator_guest_mode">访客模式：NeoAssets 每分钟约 30 次请求。</string>
+    <string name="generator_report">报告</string>
+    <string name="generator_report_line">%1$d 个文件 · %2$d 个游戏 · 已存在 %3$d · 无匹配 %4$d · 错误 %5$d</string>
+    <string name="generator_report_text_logo">使用文字标志：%1$d</string>
+    <string name="generator_cancelled">已停止</string>
+    <string name="generator_error_network">没有网络连接。</string>
+    <string name="generator_error_quota">NeoAssets 配额已用尽。</string>
+    <string name="generator_error_output">图片包文件夹不可访问。</string>
+    <string name="generator_error_no_roms">未选择任何游戏。</string>
     <string name="meta_translate_failed">翻译失败，请稍后再试。</string>
     <string name="meta_translate_same">文本已经是目标语言。</string>
+
 </resources>
